@@ -1,99 +1,110 @@
 using RestfullWithAspNet.Model;
+using RestfullWithAspNet.Model.Context;
 
 namespace RestfullWithAspNet.Services.Implementations
 {
     /// <summary>
-    /// Implementation of the IPersonService interface.
+    /// Provides implementation for the IPersonService interface.
     /// </summary>
     public class PersonServiceImplementation : IPersonService
     {
-        private static volatile int count;
+        private MySQLContext _context;
 
         /// <summary>
-        /// Creates a new person.
+        /// Initializes a new instance of the PersonServiceImplementation class.
         /// </summary>
-        /// <param name="person">The person to be created</param>
-        /// <returns>The person created</returns>
-        public Person Create(Person person)
+        /// <param name="context">Database context for accessing persons.</param>
+        public PersonServiceImplementation(MySQLContext context)
         {
-            return person;
+            _context = context;
         }
-
         /// <summary>
-        /// Delete a person by its ID.
+        /// Retrieves all persons from the database.
         /// </summary>
-        /// <param name="id">The ID of person to be deleted</param>
-        public void Delete(long id)
-        {
-
-        }
-
-        /// <summary>
-        /// Find all people.
-        /// </summary>
-        /// <returns>List of people</returns>
+        /// <returns>A list of all persons.</returns>
         public List<Person> FindAll()
         {
-            List<Person> persons = new List<Person>();
-            for (int i = 1; i <= 8; i++)
-            {
-                Person person = MockPerson(i);
-
-                persons.Add(person);
-            }
-            return persons;
+            return _context.Persons.ToList();
         }
-
         /// <summary>
-        /// Find a person by its ID.
+        /// Finds a person by their ID.
         /// </summary>
-        /// <param name="id">The ID of the person</param>
-        /// <returns>The person with the specific ID</returns>
+        /// <param name="id">The ID of the person to find.</param>
+        /// <returns>The person with the specified ID, or throws a KeyNotFoundException if not found.</returns>
         public Person FindById(long id)
         {
-            return new Person
-            {
-                Id = IncrementAndGet(),
-                FirstName = "Leandro",
-                LastName = "Costa",
-                Address = "Uberlândia - Minas Gerais - Brasil",
-                Gender = "Male"
-            };
+            var person = _context.Persons.SingleOrDefault(p => p.Id.Equals(id));
+            return person ?? throw new KeyNotFoundException($"The person with ID: {id} was not found.");
         }
-
         /// <summary>
-        /// Update a person by its ID.
+        /// Creates a new person in the database.
         /// </summary>
-        /// <param name="person">The person to be updated</param>
-        /// <returns>The person updated</returns>
-        public Person Update(Person person)
+        /// <param name="person">The person to create.</param>
+        /// <returns>The created person.</returns>
+        public Person Create(Person person)
         {
+            try
+            {
+                _context.Add(person);
+                _context.SaveChanges();
+            }
+            catch
+            {
+                throw; // Preserve the original exception
+            }
             return person;
         }
         /// <summary>
-        /// Creates a mock person.
+        /// Updates an existing person in the database.
         /// </summary>
-        /// <param name="i"> The index of the mock person</param>
-        /// <returns>The mock person</returns>
-        private static Person MockPerson(object i)
+        /// <param name="person">The person to update.</param>
+        /// <returns>The updated person, or a new Person if the original does not exist.</returns>
+        public Person Update(Person person)
         {
-            return new Person
+            if (!Exists(person.Id)) return new Person();
+            var result = _context.Persons.SingleOrDefault(p => p.Id.Equals(person.Id));
+            if (result != null)
             {
-                Id = IncrementAndGet(),
-                FirstName = "Person Name " + i,
-                LastName = "Person Last Name",
-                Address = "Some Address",
-                Gender = "Male"
-            };
+                try
+                {
+                    _context.Entry(result).CurrentValues.SetValues(person);
+                    _context.SaveChanges();
+                }
+                catch
+                {
+                    throw; // Preserve the original exception
+                }
+            }
+            return person;
         }
-
         /// <summary>
-        /// Increment the count of people.
+        /// Deletes a person from the database by their ID.
         /// </summary>
-        /// <returns>The count of people</returns>
-        public static long IncrementAndGet()
+        /// <param name="id">The ID of the person to delete.</param>
+        public void Delete(long id)
         {
-            return Interlocked.Increment(ref count);
+            var result = _context.Persons.SingleOrDefault(p => p.Id.Equals(id));
+            if (result != null)
+            {
+                try
+                {
+                    _context.Persons.Remove(result);
+                    _context.SaveChanges();
+                }
+                catch
+                {
+                    throw; // Preserve the original exception
+                }
+            }
+        }
+        /// <summary>
+        /// Checks if a person exists in the database by their ID.
+        /// </summary>
+        /// <param name="id">The ID of the person to check.</param>
+        /// <returns>True if the person exists, false otherwise.</returns>
+        private bool Exists(long id)
+        {
+            return _context.Persons.Any(p => p.Id.Equals(id));
         }
     }
 }

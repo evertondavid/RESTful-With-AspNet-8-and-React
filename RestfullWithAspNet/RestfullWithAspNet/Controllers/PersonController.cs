@@ -28,6 +28,7 @@ namespace RestfullWithAspNet.Controllers
         /// Obtém todas as pessoas.
         /// </summary>
         /// <returns>Uma lista de pessoas.</returns>
+        /// Maps GET requests to https://localhost:44300/api/person
         [HttpGet]
         public IActionResult Get()
         {
@@ -39,6 +40,7 @@ namespace RestfullWithAspNet.Controllers
         /// </summary>
         /// <param name="id">O ID da pessoa.</param>
         /// <returns>A pessoa com o ID especificado.</returns>
+        /// Maps GET requests to https://localhost:44300/api/person/{id}
         [HttpGet("{id}")]
         public IActionResult Get(long id)
         {
@@ -52,6 +54,8 @@ namespace RestfullWithAspNet.Controllers
         /// </summary>
         /// <param name="person">A pessoa a ser criada.</param>
         /// <returns>A pessoa criada.</returns>
+        /// Maps POST requests to https://localhost:44300/api/person
+        /// [FromBody] tells the framework to serialize the request body to the person instance.
         [HttpPost]
         public IActionResult Post([FromBody] Person person)
         {
@@ -64,6 +68,7 @@ namespace RestfullWithAspNet.Controllers
         /// </summary>
         /// <param name="person">A pessoa a ser atualizada.</param>
         /// <returns>A pessoa atualizada.</returns>
+        /// Maps PUT requests to https://localhost:44300/api/person
         [HttpPut]
         public IActionResult Put([FromBody] Person person)
         {
@@ -76,6 +81,7 @@ namespace RestfullWithAspNet.Controllers
         /// </summary>
         /// <param name="id">O ID da pessoa a ser deletada.</param>
         /// <returns>Retorna um status indicando que não há conteúdo após a exclusão.</returns>
+        /// Maps DELETE requests to https://localhost:44300/api/person/{id}
         [HttpDelete("{id}")]
         public IActionResult Delete(long id)
         {

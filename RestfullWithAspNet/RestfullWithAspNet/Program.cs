@@ -1,7 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+using RestfullWithAspNet.Model.Context;
 using RestfullWithAspNet.Services;
 using RestfullWithAspNet.Services.Implementations;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<MySQLContext>(options =>
+    options.UseMySql(builder.Configuration.GetConnectionString("MySQLConnection"),
+    new MySqlServerVersion(new Version(5, 7, 44)))); // Add services to the container for Entity Framework Core, At version 3.2.0 we don't have to use MySqlServerVersion
 
 // Add services to the container.
 builder.Services.AddControllers(); // Adiciona serviços MVC ao container (Controllers, Views, TagHelpers, etc.)
