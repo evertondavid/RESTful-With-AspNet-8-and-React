@@ -233,12 +233,12 @@ UpgradeLog*.htm
 *.ldf
 *.ndf
 
-# Business Intelligence projects
+# Business Intelligence projects (SSRS, SSIS)
 *.rdl.data
 *.bim.layout
 *.bim_*.settings
 
-# Microsoft Fakes
+# Microsoft Fakes - FakesAssemblies
 FakesAssemblies/
 
 # GhostDoc plugin setting file
