@@ -1,11 +1,11 @@
 using RestfullWithAspNet.Model;
 
-namespace RestfullWithAspNet.Services
+namespace RestfullWithAspNet.Business
 {
     /// <summary>
-    /// Interface for the Person service.
+    /// Interface for the Business service.
     /// </summary>
-    public interface IPersonService
+    public interface IPersonBusiness
     {
         /// <summary>
         /// Creates a new person.

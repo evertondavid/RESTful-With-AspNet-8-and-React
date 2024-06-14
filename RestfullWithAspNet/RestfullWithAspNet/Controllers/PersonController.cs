@@ -1,27 +1,30 @@
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
+using RestfullWithAspNet.Business;
 using RestfullWithAspNet.Model;
-using RestfullWithAspNet.Services;
 
 namespace RestfullWithAspNet.Controllers
 {
     /// <summary>
     /// Controlador para manipulação de dados de Person.
     /// </summary>
-    [Route("api/[controller]")]
+    [ApiVersion("1")]
+    [ApiController]
+    [Route("api/[controller]/v{version:ApiVersion}")]
     public class PersonController : ControllerBase
     {
         private readonly ILogger<PersonController> _logger;
-        private IPersonService _personService;
+        private IPersonBusiness _personBusiness;
 
         /// <summary>
         /// Construtor do controlador Person.
         /// </summary>
         /// <param name="_logger">Logger para registrar eventos ou problemas.</param>
         /// <param name="_personService">Serviço para manipulação de dados de Person.</param>
-        public PersonController(ILogger<PersonController> logger, IPersonService personService)
+        public PersonController(ILogger<PersonController> logger, IPersonBusiness personBusiness)
         {
             _logger = logger;
-            _personService = personService;
+            _personBusiness = personBusiness;
         }
 
         /// <summary>
@@ -32,7 +35,7 @@ namespace RestfullWithAspNet.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(_personService.FindAll());
+            return Ok(_personBusiness.FindAll());
         }
 
         /// <summary>
@@ -44,7 +47,7 @@ namespace RestfullWithAspNet.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(long id)
         {
-            var person = _personService.FindById(id);
+            var person = _personBusiness.FindById(id);
             if (person == null) return NotFound();
             return Ok(person);
         }
@@ -60,7 +63,7 @@ namespace RestfullWithAspNet.Controllers
         public IActionResult Post([FromBody] Person person)
         {
             if (person == null) return BadRequest();
-            return Ok(_personService.Create(person));
+            return Ok(_personBusiness.Create(person));
         }
 
         /// <summary>
@@ -73,7 +76,7 @@ namespace RestfullWithAspNet.Controllers
         public IActionResult Put([FromBody] Person person)
         {
             if (person == null) return BadRequest();
-            return Ok(_personService.Update(person));
+            return Ok(_personBusiness.Update(person));
         }
 
         /// <summary>
@@ -85,7 +88,7 @@ namespace RestfullWithAspNet.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(long id)
         {
-            _personService.Delete(id);
+            _personBusiness.Delete(id);
             return NoContent();
         }
     }

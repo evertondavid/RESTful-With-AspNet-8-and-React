@@ -1,12 +1,12 @@
 using RestfullWithAspNet.Model;
 using RestfullWithAspNet.Model.Context;
 
-namespace RestfullWithAspNet.Services.Implementations
+namespace RestfullWithAspNet.Repository.Implementations
 {
     /// <summary>
     /// Provides implementation for the IPersonService interface.
     /// </summary>
-    public class PersonServiceImplementation : IPersonService
+    public class PersonRepositoryImplementation : IPersonRepository
     {
         private MySQLContext _context;
 
@@ -14,7 +14,7 @@ namespace RestfullWithAspNet.Services.Implementations
         /// Initializes a new instance of the PersonServiceImplementation class.
         /// </summary>
         /// <param name="context">Database context for accessing persons.</param>
-        public PersonServiceImplementation(MySQLContext context)
+        public PersonRepositoryImplementation(MySQLContext context)
         {
             _context = context;
         }
@@ -102,7 +102,7 @@ namespace RestfullWithAspNet.Services.Implementations
         /// </summary>
         /// <param name="id">The ID of the person to check.</param>
         /// <returns>True if the person exists, false otherwise.</returns>
-        private bool Exists(long id)
+        public bool Exists(long id)
         {
             return _context.Persons.Any(p => p.Id.Equals(id));
         }

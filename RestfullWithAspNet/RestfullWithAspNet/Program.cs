@@ -1,19 +1,24 @@
 using Microsoft.EntityFrameworkCore;
+using RestfullWithAspNet.Business;
+using RestfullWithAspNet.Business.Implementations;
 using RestfullWithAspNet.Model.Context;
-using RestfullWithAspNet.Services;
-using RestfullWithAspNet.Services.Implementations;
+using RestfullWithAspNet.Repository;
+using RestfullWithAspNet.Repository.Implementations;
 
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddDbContext<MySQLContext>(options =>
-    options.UseMySql(builder.Configuration.GetConnectionString("MySQLConnection"),
-    new MySqlServerVersion(new Version(5, 7, 44)))); // Add services to the container for Entity Framework Core, At version 3.2.0 we don't have to use MySqlServerVersion
 
 // Add services to the container.
 builder.Services.AddControllers(); // Adiciona serviços MVC ao container (Controllers, Views, TagHelpers, etc.)
 
+var connection = builder.Configuration.GetConnectionString("MySQLConnection"); // Get the connection string from the appsettings.json file
+builder.Services.AddDbContext<MySQLContext>(options =>
+    options.UseMySql(connection, new MySqlServerVersion(new Version(5, 7, 44)))); // Add services to the container for Entity Framework Core, At version 3.2.0 we don't have to use MySqlServerVersion
+
+builder.Services.AddApiVersioning(); // Add services to the container for API versioning
+
 // Injection of dependencies
-builder.Services.AddScoped<IPersonService, PersonServiceImplementation>(); // Register the service in the container
+builder.Services.AddScoped<IPersonBusiness, PersonBusinessImplementation>(); // Register the Rules of business in the container
+builder.Services.AddScoped<IPersonRepository, PersonRepositoryImplementation>(); // Register the Rules of Repository (DataBase, Files, etc) in the container
 
 // more about dependency injection: https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-5.0
 builder.Services.AddEndpointsApiExplorer(); // Add services to the container for API Explorer (used by Swashbuckle)
