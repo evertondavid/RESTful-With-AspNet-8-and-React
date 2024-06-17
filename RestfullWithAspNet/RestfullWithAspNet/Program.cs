@@ -1,11 +1,10 @@
-using EvolveDb;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 using RestfullWithAspNet.Business;
 using RestfullWithAspNet.Business.Implementations;
 using RestfullWithAspNet.Model.Context;
 using RestfullWithAspNet.Repository;
-using RestfullWithAspNet.Repository.Implementations;
+using RestfullWithAspNet.Repository.Generic;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,7 +19,8 @@ builder.Services.AddApiVersioning(); // Add services to the container for API ve
 
 // Injection of dependencies
 builder.Services.AddScoped<IPersonBusiness, PersonBusinessImplementation>(); // Register the Rules of business in the container
-builder.Services.AddScoped<IPersonRepository, PersonRepositoryImplementation>(); // Register the Rules of Repository (DataBase, Files, etc) in the container
+builder.Services.AddScoped<IBookBusiness, BookBusinessImplementation>(); // Register the Rules of business in the container
+builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>)); // Register the Rules of Repository (DataBase, Files, etc) in the container
 
 // more about dependency injection: https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-5.0
 builder.Services.AddEndpointsApiExplorer(); // Add services to the container for API Explorer (used by Swashbuckle)
@@ -49,19 +49,16 @@ void MigrateDatabase(string connection)
 {
     try
     {
-        var evolveConnection = new MySqlConnection(connection);
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Evolve"/> class with the specified connection string and logging function.
-        /// </summary>
-        /// <param name="evolveConnection">The connection string used for database migration.</param>
-        /// <param name="logFunction">The logging function used to log information during the migration process.</param>
-        /// <returns>An instance of the <see cref="Evolve"/> class.</returns>
-        var evolve = new Evolve(evolveConnection, Log.Information)
+        using (var evolveConnection = new MySqlConnection(connection))
         {
-            Locations = new List<string> { "db/migrations", "db/dataset" },
-            IsEraseDisabled = true,
-        };
-        evolve.Migrate();
+            var evolve = new Evolve.Evolve(evolveConnection, Log.Information)
+            {
+                Locations = new List<string> { "db/migrations", "db/dataset" },
+                IsEraseDisabled = true
+                //ValidateChecksums = false // Disable checksum validation
+            };
+            evolve.Migrate();
+        }
     }
     catch (Exception ex)
     {

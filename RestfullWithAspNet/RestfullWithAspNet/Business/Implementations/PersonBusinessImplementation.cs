@@ -1,5 +1,4 @@
 using RestfullWithAspNet.Model;
-using RestfullWithAspNet.Model.Context;
 using RestfullWithAspNet.Repository;
 
 namespace RestfullWithAspNet.Business.Implementations
@@ -9,13 +8,13 @@ namespace RestfullWithAspNet.Business.Implementations
     /// </summary>
     public class PersonBusinessImplementation : IPersonBusiness
     {
-        private readonly IPersonRepository _repository;
+        private readonly IRepository<Person> _repository;
 
         /// <summary>
         /// Initializes a new instance of the PersonServiceImplementation class.
         /// </summary>
         /// <param name="context">Database context for accessing persons.</param>
-        public PersonBusinessImplementation(IPersonRepository repository)
+        public PersonBusinessImplementation(IRepository<Person> repository)
         {
             _repository = repository;
         }

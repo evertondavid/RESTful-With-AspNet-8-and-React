@@ -1,4 +1,4 @@
-INSERT INTO books (`id`,`author`,`title`,`launch_date`,`price`) VALUES
+INSERT INTO book (`id`,`author`,`title`,`launch_date`,`price`) VALUES
 (1,'Robert C. Martin','Clean Code','2008-08-11',50.00),
 (2,'Martin Fowler','Refactoring','1999-07-08',50.00),
 (3,'Kent Beck','Extreme Programming Explained','1999-10-01',50.00),

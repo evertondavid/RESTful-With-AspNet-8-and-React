@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using RestfullWithAspNet.Model.Base;
 
 namespace RestfullWithAspNet.Model
 {
@@ -6,14 +7,8 @@ namespace RestfullWithAspNet.Model
     /// <summary>
     /// Classe Person that represents a person.
     /// </summary>
-    public class Person
+    public class Person : BaseEntity
     {
-        /// <summary>
-        /// Get or set the person's id.
-        /// </summary>
-        [Column("id")]
-        public long Id { get; set; }
-
         /// <summary>
         /// Get or set the person's first name.
         /// </summary>
