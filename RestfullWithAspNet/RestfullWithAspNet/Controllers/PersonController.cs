@@ -1,12 +1,12 @@
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using RestfullWithAspNet.Business;
-using RestfullWithAspNet.Model;
+using RestfullWithAspNet.Data.VO;
 
 namespace RestfullWithAspNet.Controllers
 {
     /// <summary>
-    /// Controlador para manipulação de dados de Person.
+    /// Controller for manipulating Person data.
     /// </summary>
     [ApiVersion("1")]
     [ApiController]
@@ -17,10 +17,10 @@ namespace RestfullWithAspNet.Controllers
         private IPersonBusiness _personBusiness;
 
         /// <summary>
-        /// Construtor do controlador Person.
+        /// Constructor for the Person controller.
         /// </summary>
-        /// <param name="_logger">Logger para registrar eventos ou problemas.</param>
-        /// <param name="_personService">Serviço para manipulação de dados de Person.</param>
+        /// <param name="_logger">Logger to register events or problems.</param>
+        /// <param name="_personBusiness">Service for manipulating Person data.</param>
         public PersonController(ILogger<PersonController> logger, IPersonBusiness personBusiness)
         {
             _logger = logger;
@@ -28,9 +28,9 @@ namespace RestfullWithAspNet.Controllers
         }
 
         /// <summary>
-        /// Obtém todas as pessoas.
+        /// Gets all people.
         /// </summary>
-        /// <returns>Uma lista de pessoas.</returns>
+        /// <returns>A list of people.</returns>
         /// Maps GET requests to https://localhost:44300/api/person
         [HttpGet]
         public IActionResult Get()
@@ -39,10 +39,10 @@ namespace RestfullWithAspNet.Controllers
         }
 
         /// <summary>
-        /// Obtém uma pessoa pelo seu ID.
+        /// Gets a person by their ID.
         /// </summary>
-        /// <param name="id">O ID da pessoa.</param>
-        /// <returns>A pessoa com o ID especificado.</returns>
+        /// <param name="id">The ID of the person.</param>
+        /// <returns>The person with the specified ID.</returns>
         /// Maps GET requests to https://localhost:44300/api/person/{id}
         [HttpGet("{id}")]
         public IActionResult Get(long id)
@@ -53,37 +53,37 @@ namespace RestfullWithAspNet.Controllers
         }
 
         /// <summary>
-        /// Cria uma nova pessoa.
+        /// Creates a new person.
         /// </summary>
-        /// <param name="person">A pessoa a ser criada.</param>
-        /// <returns>A pessoa criada.</returns>
+        /// <param name="person">The person to be created.</param>
+        /// <returns>The created person.</returns>
         /// Maps POST requests to https://localhost:44300/api/person
         /// [FromBody] tells the framework to serialize the request body to the person instance.
         [HttpPost]
-        public IActionResult Post([FromBody] Person person)
+        public IActionResult Post([FromBody] PersonVO person)
         {
             if (person == null) return BadRequest();
             return Ok(_personBusiness.Create(person));
         }
 
         /// <summary>
-        /// Atualiza uma pessoa existente.
+        /// Updates an existing person.
         /// </summary>
-        /// <param name="person">A pessoa a ser atualizada.</param>
-        /// <returns>A pessoa atualizada.</returns>
+        /// <param name="person">The person to be updated.</param>
+        /// <returns>The updated person.</returns>
         /// Maps PUT requests to https://localhost:44300/api/person
         [HttpPut]
-        public IActionResult Put([FromBody] Person person)
+        public IActionResult Put([FromBody] PersonVO person)
         {
             if (person == null) return BadRequest();
             return Ok(_personBusiness.Update(person));
         }
 
         /// <summary>
-        /// Deleta uma pessoa pelo seu ID.
+        /// Deletes a person by their ID.
         /// </summary>
-        /// <param name="id">O ID da pessoa a ser deletada.</param>
-        /// <returns>Retorna um status indicando que não há conteúdo após a exclusão.</returns>
+        /// <param name="id">The ID of the person to be deleted.</param>
+        /// <returns>Returns a status indicating that there is no content after the deletion.</returns>
         /// Maps DELETE requests to https://localhost:44300/api/person/{id}
         [HttpDelete("{id}")]
         public IActionResult Delete(long id)

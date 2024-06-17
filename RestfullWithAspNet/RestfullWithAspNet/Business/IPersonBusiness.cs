@@ -1,4 +1,5 @@
-using RestfullWithAspNet.Model;
+using RestfullWithAspNet.Data.VO;
+using System.Collections.Generic; // Added using statement for List<T>
 
 namespace RestfullWithAspNet.Business
 {
@@ -12,27 +13,27 @@ namespace RestfullWithAspNet.Business
         /// </summary>
         /// <param name="person">The person to be created.</param>
         /// <returns>The person created.</returns>
-        Person Create(Person person);
+        PersonVO Create(PersonVO person);
 
         /// <summary>
         /// Find a person by its ID.
         /// </summary>
         /// <param name="id">The ID of the person.</param>
         /// <returns>The person with the specific ID.</returns>
-        Person FindById(long id);
+        PersonVO FindById(long id);
 
         /// <summary>
         /// Find all people.
         /// </summary>
         /// <returns>List of people.</returns>
-        List<Person> FindAll();
+        List<PersonVO> FindAll(); // Added return type List<PersonVO>
 
         /// <summary>
         /// Updates a person.
         /// </summary>
         /// <param name="person">The person to be updated.</param>
         /// <returns>The person updated.</returns>
-        Person Update(Person person);
+        PersonVO Update(PersonVO person);
 
         /// <summary>
         /// Delete a person by its ID.

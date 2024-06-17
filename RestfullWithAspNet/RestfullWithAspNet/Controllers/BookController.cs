@@ -1,12 +1,12 @@
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using RestfullWithAspNet.Business;
-using RestfullWithAspNet.Model;
+using RestfullWithAspNet.Data.VO;
 
 namespace RestfullWithAspNet.Controllers
 {
     /// <summary>
-    /// Controlador para manipulação de dados de book.
+    /// Controller for manipulating book data.
     /// </summary>
     [ApiVersion("1")]
     [ApiController]
@@ -17,10 +17,10 @@ namespace RestfullWithAspNet.Controllers
         private IBookBusiness _bookBusiness;
 
         /// <summary>
-        /// Construtor do controlador Book.
+        /// Constructor for the Book controller.
         /// </summary>
-        /// <param name="_logger">Logger para registrar eventos ou problemas.</param>
-        /// <param name="_bookService">Serviço para manipulação de dados de Book.</param>
+        /// <param name="_logger">Logger to register events or problems.</param>
+        /// <param name="_bookService">Service for manipulating Book data.</param>
         public BookController(ILogger<BookController> logger, IBookBusiness bookBusiness)
         {
             _logger = logger;
@@ -28,9 +28,9 @@ namespace RestfullWithAspNet.Controllers
         }
 
         /// <summary>
-        /// Obtém todas as livros.
+        /// Gets all books.
         /// </summary>
-        /// <returns>Uma lista de livros.</returns>
+        /// <returns>A list of books.</returns>
         /// Maps GET requests to https://localhost:44300/api/book
         [HttpGet]
         public IActionResult Get()
@@ -39,10 +39,10 @@ namespace RestfullWithAspNet.Controllers
         }
 
         /// <summary>
-        /// Obtém uma pessoa pelo seu ID.
+        /// Gets a book by its ID.
         /// </summary>
-        /// <param name="id">O ID da pessoa.</param>
-        /// <returns>A pessoa com o ID especificado.</returns>
+        /// <param name="id">The ID of the book.</param>
+        /// <returns>The book with the specified ID.</returns>
         /// Maps GET requests to https://localhost:44300/api/book/{id}
         [HttpGet("{id}")]
         public IActionResult Get(long id)
@@ -53,37 +53,37 @@ namespace RestfullWithAspNet.Controllers
         }
 
         /// <summary>
-        /// Cria uma nova pessoa.
+        /// Creates a new book.
         /// </summary>
-        /// <param name="book">A pessoa a ser criada.</param>
-        /// <returns>A pessoa criada.</returns>
+        /// <param name="book">The book to be created.</param>
+        /// <returns>The created book.</returns>
         /// Maps POST requests to https://localhost:44300/api/book
         /// [FromBody] tells the framework to serialize the request body to the book instance.
         [HttpPost]
-        public IActionResult Post([FromBody] Book book)
+        public IActionResult Post([FromBody] BookVO book)
         {
             if (book == null) return BadRequest();
             return Ok(_bookBusiness.Create(book));
         }
 
         /// <summary>
-        /// Atualiza uma pessoa existente.
+        /// Updates an existing book.
         /// </summary>
-        /// <param name="book">A pessoa a ser atualizada.</param>
-        /// <returns>A pessoa atualizada.</returns>
+        /// <param name="book">The book to be updated.</param>
+        /// <returns>The updated book.</returns>
         /// Maps PUT requests to https://localhost:44300/api/book
         [HttpPut]
-        public IActionResult Put([FromBody] Book book)
+        public IActionResult Put([FromBody] BookVO book)
         {
             if (book == null) return BadRequest();
             return Ok(_bookBusiness.Update(book));
         }
 
         /// <summary>
-        /// Deleta uma pessoa pelo seu ID.
+        /// Deletes a book by its ID.
         /// </summary>
-        /// <param name="id">O ID da pessoa a ser deletada.</param>
-        /// <returns>Retorna um status indicando que não há conteúdo após a exclusão.</returns>
+        /// <param name="id">The ID of the book to be deleted.</param>
+        /// <returns>Returns a status indicating that there is no content after the deletion.</returns>
         /// Maps DELETE requests to https://localhost:44300/api/book/{id}
         [HttpDelete("{id}")]
         public IActionResult Delete(long id)

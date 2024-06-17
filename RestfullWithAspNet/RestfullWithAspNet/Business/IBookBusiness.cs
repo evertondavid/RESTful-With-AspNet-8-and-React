@@ -1,4 +1,5 @@
-using RestfullWithAspNet.Model;
+using RestfullWithAspNet.Data.VO;
+using System.Collections.Generic; // Added using statement for List<T>
 
 namespace RestfullWithAspNet.Business
 {
@@ -12,27 +13,27 @@ namespace RestfullWithAspNet.Business
         /// </summary>
         /// <param name="book">The book to be created.</param>
         /// <returns>The book created.</returns>
-        Book Create(Book book);
+        BookVO Create(BookVO book);
 
         /// <summary>
         /// Find a book by its ID.
         /// </summary>
         /// <param name="id">The ID of the book.</param>
         /// <returns>The book with the specific ID.</returns>
-        Book FindById(long id);
+        BookVO FindById(long id);
 
         /// <summary>
-        /// Find all people.
+        /// Find all books.
         /// </summary>
-        /// <returns>List of people.</returns>
-        List<Book> FindAll();
+        /// <returns>List of books.</returns>
+        List<BookVO> FindAll(); // Updated comment to reflect that it returns a list of books
 
         /// <summary>
-        /// Updates a .
+        /// Updates a book.
         /// </summary>
         /// <param name="book">The book to be updated.</param>
         /// <returns>The book updated.</returns>
-        Book Update(Book book);
+        BookVO Update(BookVO book);
 
         /// <summary>
         /// Delete a book by its ID.

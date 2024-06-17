@@ -1,3 +1,5 @@
+using RestfullWithAspNet.Data.Converter.Implementations;
+using RestfullWithAspNet.Data.VO;
 using RestfullWithAspNet.Model;
 using RestfullWithAspNet.Repository;
 
@@ -9,23 +11,25 @@ namespace RestfullWithAspNet.Business.Implementations
     public class PersonBusinessImplementation : IPersonBusiness
     {
         private readonly IRepository<Person> _repository;
+        private readonly PersonConverter _converter;
 
         /// <summary>
-        /// Initializes a new instance of the PersonServiceImplementation class.
+        /// Initializes a new instance of the PersonBusinessImplementation class.
         /// </summary>
-        /// <param name="context">Database context for accessing persons.</param>
+        /// <param name="repository">The repository for accessing persons.</param>
         public PersonBusinessImplementation(IRepository<Person> repository)
         {
             _repository = repository;
+            _converter = new PersonConverter();
         }
 
         /// <summary>
         /// Retrieves all persons from the database.
         /// </summary>
         /// <returns>A list of all persons.</returns>
-        public List<Person> FindAll()
+        public List<PersonVO> FindAll()
         {
-            return _repository.FindAll();
+            return _converter.Parse(_repository.FindAll());
         }
 
         /// <summary>
@@ -33,10 +37,10 @@ namespace RestfullWithAspNet.Business.Implementations
         /// </summary>
         /// <param name="id">The ID of the person to find.</param>
         /// <returns>The person with the specified ID, or throws a KeyNotFoundException if not found.</returns>
-        public Person FindById(long id)
+        public PersonVO FindById(long id)
         {
             var person = _repository.FindById(id);
-            return person ?? throw new KeyNotFoundException($"The person with ID: {id} was not found.");
+            return _converter.Parse(person) ?? throw new KeyNotFoundException($"The person with ID: {id} was not found.");
         }
 
         /// <summary>
@@ -44,9 +48,11 @@ namespace RestfullWithAspNet.Business.Implementations
         /// </summary>
         /// <param name="person">The person to create.</param>
         /// <returns>The created person.</returns>
-        public Person Create(Person person)
+        public PersonVO Create(PersonVO person)
         {
-            return _repository.Create(person);
+            var personEntity = _converter.Parse(person); // Convert the VO to an Entity
+            personEntity = _repository.Create(personEntity); // Create the entity in the database
+            return _converter.Parse(personEntity); // Convert the entity back to a VO
         }
 
         /// <summary>
@@ -54,9 +60,11 @@ namespace RestfullWithAspNet.Business.Implementations
         /// </summary>
         /// <param name="person">The person to update.</param>
         /// <returns>The updated person, or a new Person if the original does not exist.</returns>
-        public Person Update(Person person)
+        public PersonVO Update(PersonVO person)
         {
-            return _repository.Update(person);
+            var personEntity = _converter.Parse(person); // Convert the VO to an Entity
+            personEntity = _repository.Update(personEntity); // Update the entity in the database
+            return _converter.Parse(personEntity); // Convert the entity back to a VO
         }
 
         /// <summary>

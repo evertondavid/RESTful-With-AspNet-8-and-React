@@ -1,3 +1,5 @@
+using RestfullWithAspNet.Data.Converter.Implementations;
+using RestfullWithAspNet.Data.VO;
 using RestfullWithAspNet.Model;
 using RestfullWithAspNet.Repository;
 
@@ -9,6 +11,7 @@ namespace RestfullWithAspNet.Business.Implementations
     public class BookBusinessImplementation : IBookBusiness
     {
         private readonly IRepository<Book> _repository;
+        private readonly BookConverter _converter;
 
         /// <summary>
         /// Initializes a new instance of the BookServiceImplementation class.
@@ -17,26 +20,27 @@ namespace RestfullWithAspNet.Business.Implementations
         public BookBusinessImplementation(IRepository<Book> repository)
         {
             _repository = repository;
+            _converter = new BookConverter();
         }
 
         /// <summary>
-        /// Retrieves all book from the database.
+        /// Retrieves all books from the database.
         /// </summary>
         /// <returns>A list of all books.</returns>
-        public List<Book> FindAll()
+        public List<BookVO> FindAll()
         {
-            return _repository.FindAll();
+            return _converter.Parse(_repository.FindAll());
         }
 
         /// <summary>
-        /// Finds a book by their ID.
+        /// Finds a book by its ID.
         /// </summary>
         /// <param name="id">The ID of the book to find.</param>
         /// <returns>The book with the specified ID, or throws a KeyNotFoundException if not found.</returns>
-        public Book FindById(long id)
+        public BookVO FindById(long id)
         {
             var book = _repository.FindById(id);
-            return book ?? throw new KeyNotFoundException($"The book with ID: {id} was not found.");
+            return _converter.Parse(book) ?? throw new KeyNotFoundException($"The book with ID: {id} was not found.");
         }
 
         /// <summary>
@@ -44,9 +48,11 @@ namespace RestfullWithAspNet.Business.Implementations
         /// </summary>
         /// <param name="book">The book to create.</param>
         /// <returns>The created book.</returns>
-        public Book Create(Book book)
+        public BookVO Create(BookVO book)
         {
-            return _repository.Create(book);
+            var bookEntity = _converter.Parse(book); // Convert the VO to an Entity
+            bookEntity = _repository.Create(bookEntity); // Create the entity in the database
+            return _converter.Parse(bookEntity); // Convert the entity back to a VO
         }
 
         /// <summary>
@@ -54,13 +60,15 @@ namespace RestfullWithAspNet.Business.Implementations
         /// </summary>
         /// <param name="book">The book to update.</param>
         /// <returns>The updated book, or a new Book if the original does not exist.</returns>
-        public Book Update(Book book)
+        public BookVO Update(BookVO book)
         {
-            return _repository.Update(book);
+            var bookEntity = _converter.Parse(book); // Convert the VO to an Entity
+            bookEntity = _repository.Update(bookEntity); // Update the entity in the database
+            return _converter.Parse(bookEntity); // Convert the entity back to a VO
         }
 
         /// <summary>
-        /// Deletes a book from the database by their ID.
+        /// Deletes a book from the database by its ID.
         /// </summary>
         /// <param name="id">The ID of the book to delete.</param>
         public void Delete(long id)
