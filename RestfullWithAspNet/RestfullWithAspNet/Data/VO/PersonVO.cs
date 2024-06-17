@@ -1,5 +1,3 @@
-// Purpose: Represents a person.
-
 namespace RestfullWithAspNet.Data.VO
 {
     /// <summary>
@@ -11,6 +9,7 @@ namespace RestfullWithAspNet.Data.VO
         /// Get or set the person's ID.
         /// </summary>
         public long Id { get; set; }
+
         /// <summary>
         /// Get or set the person's first name.
         /// </summary>
@@ -27,6 +26,7 @@ namespace RestfullWithAspNet.Data.VO
                 _firstName = value;
             }
         }
+
         /// <summary>
         /// Get or set the person's last name.
         /// </summary>
@@ -43,6 +43,7 @@ namespace RestfullWithAspNet.Data.VO
                 _lastName = value;
             }
         }
+
         /// <summary>
         /// Gets or sets the address. The address should not be null or empty.
         /// </summary>

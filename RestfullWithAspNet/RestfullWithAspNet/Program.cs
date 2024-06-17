@@ -1,3 +1,4 @@
+using System.Net.Http.Headers;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 using RestfullWithAspNet.Business;
@@ -23,8 +24,20 @@ builder.Services.AddScoped<IBookBusiness, BookBusinessImplementation>(); // Regi
 builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>)); // Register the Rules of Repository (DataBase, Files, etc) in the container
 
 // more about dependency injection: https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-5.0
-builder.Services.AddEndpointsApiExplorer(); // Add services to the container for API Explorer (used by Swashbuckle)
-builder.Services.AddSwaggerGen(); // Add services to the container for Swagger
+// Add services to the container for API Explorer (used by Swashbuckle)
+builder.Services.AddEndpointsApiExplorer();
+
+// Add services to the container for Swagger
+builder.Services.AddSwaggerGen();
+
+// Add services to the container for MVC
+builder.Services.AddMvc(options =>
+{
+    options.RespectBrowserAcceptHeader = true;
+    options.FormatterMappings.SetMediaTypeMappingForFormat("xml", "application/xml"); // Add support for XML
+    options.FormatterMappings.SetMediaTypeMappingForFormat("json", "application/json"); // Add support for JSON
+})
+.AddXmlSerializerFormatters(); // Add support for XML serialization in the MVC middleware
 
 var app = builder.Build(); // Create the application instance.
 // Configure the HTTP request pipeline.
