@@ -7,12 +7,15 @@
 // LaunchDate: represents the book's launch date.
 // Price: represents the book's price.
 
+using RestfullWithAspNet.Hypernedia;
+using RestfullWithAspNet.Hypernedia.Abstract;
+
 namespace RestfullWithAspNet.Data.VO
 {
     /// <summary>
     /// Classe Book that represents a book.
     /// </summary>
-    public class BookVO
+    public class BookVO : ISupportsHyperMedia
     {
         /// <summary>
         /// Get or set the person's ID.
@@ -72,5 +75,7 @@ namespace RestfullWithAspNet.Data.VO
                 _price = value;
             }
         }
+
+        public List<HyperMediaLink> Links { get; set; } = new List<HyperMediaLink>();
     }
 }

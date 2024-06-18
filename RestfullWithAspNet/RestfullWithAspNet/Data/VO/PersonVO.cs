@@ -1,9 +1,12 @@
+using RestfullWithAspNet.Hypernedia;
+using RestfullWithAspNet.Hypernedia.Abstract;
+
 namespace RestfullWithAspNet.Data.VO
 {
     /// <summary>
     /// Classe Person that represents a person.
     /// </summary>
-    public class PersonVO
+    public class PersonVO : ISupportsHyperMedia
     {
         /// <summary>
         /// Get or set the person's ID.
@@ -77,5 +80,7 @@ namespace RestfullWithAspNet.Data.VO
                 _gender = value;
             }
         }
+
+        public List<HyperMediaLink> Links { get; set; } = new List<HyperMediaLink>();
     }
 }

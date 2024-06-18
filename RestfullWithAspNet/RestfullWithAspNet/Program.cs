@@ -1,8 +1,9 @@
-using System.Net.Http.Headers;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 using RestfullWithAspNet.Business;
 using RestfullWithAspNet.Business.Implementations;
+using RestfullWithAspNet.Hypernedia.Enricher;
+using RestfullWithAspNet.Hypernedia.Filters;
 using RestfullWithAspNet.Model.Context;
 using RestfullWithAspNet.Repository;
 using RestfullWithAspNet.Repository.Generic;
@@ -39,6 +40,12 @@ builder.Services.AddMvc(options =>
 })
 .AddXmlSerializerFormatters(); // Add support for XML serialization in the MVC middleware
 
+//HATEOAS
+var filterOptions = new HyperMediaFilterOptions(); // Create a new instance of the HyperMediaFilterOptions class
+filterOptions.ContentResponseEnricherList.Add(new PersonEnricher()); // Add a new instance of the PersonEnricher class to the ContentResponseEnricherList
+filterOptions.ContentResponseEnricherList.Add(new BookEnricher()); // Add a new instance of the BookEnricher class to the ContentResponseEnricherList
+builder.Services.AddSingleton(filterOptions); // Add the filterOptions instance to the container
+
 var app = builder.Build(); // Create the application instance.
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) // Verify if the environment is development
@@ -55,6 +62,9 @@ app.UseHttpsRedirection(); // Redirects HTTP requests to HTTPS
 app.UseAuthorization(); // Enable authorization middleware
 
 app.MapControllers(); // Add the MVC middleware to the pipeline
+
+//HATEOAS
+app.MapControllerRoute("DefaultApi", "{controller=Values}/v{version:apiVersion}/{id?}"); // Add a route to the MVC middleware
 
 app.Run(); // Execute the application
 

@@ -2,6 +2,7 @@ using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using RestfullWithAspNet.Business;
 using RestfullWithAspNet.Data.VO;
+using RestfullWithAspNet.Hypernedia.Filters;
 
 namespace RestfullWithAspNet.Controllers
 {
@@ -19,8 +20,8 @@ namespace RestfullWithAspNet.Controllers
         /// <summary>
         /// Constructor for the Book controller.
         /// </summary>
-        /// <param name="_logger">Logger to register events or problems.</param>
-        /// <param name="_bookService">Service for manipulating Book data.</param>
+        /// <param name="logger">Logger to register events or problems.</param>
+        /// <param name="bookBusiness">Service for manipulating Book data.</param>
         public BookController(ILogger<BookController> logger, IBookBusiness bookBusiness)
         {
             _logger = logger;
@@ -31,8 +32,12 @@ namespace RestfullWithAspNet.Controllers
         /// Gets all books.
         /// </summary>
         /// <returns>A list of books.</returns>
-        /// Maps GET requests to https://localhost:44300/api/book
+        /// <remarks>
+        /// Sample request:
+        ///     GET /api/book
+        /// </remarks>
         [HttpGet]
+        [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Get()
         {
             return Ok(_bookBusiness.FindAll());
@@ -43,8 +48,12 @@ namespace RestfullWithAspNet.Controllers
         /// </summary>
         /// <param name="id">The ID of the book.</param>
         /// <returns>The book with the specified ID.</returns>
-        /// Maps GET requests to https://localhost:44300/api/book/{id}
+        /// <remarks>
+        /// Sample request:
+        ///     GET /api/book/{id}
+        /// </remarks>
         [HttpGet("{id}")]
+        [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Get(long id)
         {
             var book = _bookBusiness.FindById(id);
@@ -57,9 +66,16 @@ namespace RestfullWithAspNet.Controllers
         /// </summary>
         /// <param name="book">The book to be created.</param>
         /// <returns>The created book.</returns>
-        /// Maps POST requests to https://localhost:44300/api/book
-        /// [FromBody] tells the framework to serialize the request body to the book instance.
+        /// <remarks>
+        /// Sample request:
+        ///     POST /api/book
+        ///     {
+        ///         "title": "Sample Book",
+        ///         "author": "John Doe"
+        ///     }
+        /// </remarks>
         [HttpPost]
+        [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Post([FromBody] BookVO book)
         {
             if (book == null) return BadRequest();
@@ -71,8 +87,17 @@ namespace RestfullWithAspNet.Controllers
         /// </summary>
         /// <param name="book">The book to be updated.</param>
         /// <returns>The updated book.</returns>
-        /// Maps PUT requests to https://localhost:44300/api/book
+        /// <remarks>
+        /// Sample request:
+        ///     PUT /api/book
+        ///     {
+        ///         "id": 1,
+        ///         "title": "Updated Book",
+        ///         "author": "Jane Doe"
+        ///     }
+        /// </remarks>
         [HttpPut]
+        [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Put([FromBody] BookVO book)
         {
             if (book == null) return BadRequest();
@@ -84,7 +109,10 @@ namespace RestfullWithAspNet.Controllers
         /// </summary>
         /// <param name="id">The ID of the book to be deleted.</param>
         /// <returns>Returns a status indicating that there is no content after the deletion.</returns>
-        /// Maps DELETE requests to https://localhost:44300/api/book/{id}
+        /// <remarks>
+        /// Sample request:
+        ///     DELETE /api/book/{id}
+        /// </remarks>
         [HttpDelete("{id}")]
         public IActionResult Delete(long id)
         {
