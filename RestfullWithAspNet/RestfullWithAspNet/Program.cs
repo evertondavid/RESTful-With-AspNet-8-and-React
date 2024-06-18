@@ -11,94 +11,127 @@ using RestfullWithAspNet.Repository;
 using RestfullWithAspNet.Repository.Generic;
 using Serilog;
 
-var appTitle = "RESTful API to Azure with ASP.NET Core 5 and Docker"; // Set the title of the application
-var appVersion = "1.0.0"; // Set the version of the application
-var appDescription = "RESTful API to Azure with ASP.NET Core 5 and Docker"; // Set the name of the application
+// Application metadata
+var appAspNetVersion = "7.0";
+var appTitle = $"RESTful API to Azure with ASP.NET '{appAspNetVersion}' and Docker";
+var appVersion = "1.0.0";
+var appDescription = $"RESTful API to Azure with ASP.NET '{appAspNetVersion}' and Docker";
+
 var builder = WebApplication.CreateBuilder(args);
-var connection = builder.Configuration.GetConnectionString("MySQLConnection"); // Get the connection string from the appsettings.json file
+var connection = builder.Configuration.GetConnectionString("MySQLConnection");
 
-// Add services to the container.
-builder.Services.AddRouting(options => options.LowercaseUrls = true); // Add services to the container for routing
+// Service Configuration
 
-builder.Services.AddControllers(); // Adiciona serviços MVC ao container (Controllers, Views, TagHelpers, etc.)
-
+// Configure Entity Framework with MySQL
 builder.Services.AddDbContext<MySQLContext>(options =>
-    options.UseMySql(connection, new MySqlServerVersion(new Version(5, 7, 44)))); // Add services to the container for Entity Framework Core, At version 3.2.0 we don't have to use MySqlServerVersion
+    options.UseMySql(connection, new MySqlServerVersion(new Version(5, 7, 44))));
 
-builder.Services.AddApiVersioning(); // Add services to the container for API versioning
+// Add MVC services to the container
+builder.Services.AddControllers();
 
-// Injection of dependencies
-builder.Services.AddScoped<IPersonBusiness, PersonBusinessImplementation>(); // Register the Rules of business in the container
-builder.Services.AddScoped<IBookBusiness, BookBusinessImplementation>(); // Register the Rules of business in the container
-builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>)); // Register the Rules of Repository (DataBase, Files, etc) in the container
+// Configure CORS to allow any origin, method, and header
+builder.Services.AddCors(options => options.AddDefaultPolicy(builder =>
+{
+    builder.AllowAnyOrigin()
+           .AllowAnyMethod()
+           .AllowAnyHeader();
+}));
 
-// more about dependency injection: https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-5.0
-// Add services to the container for API Explorer (used by Swashbuckle)
+// Configure routing to use lowercase URLs
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
+
+// Add API versioning support
+builder.Services.AddApiVersioning();
+
+// Dependency Injection Configuration
+
+// Register business services
+builder.Services.AddScoped<IPersonBusiness, PersonBusinessImplementation>();
+builder.Services.AddScoped<IBookBusiness, BookBusinessImplementation>();
+
+// Register generic repository service
+builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+
+// API Documentation Configuration
+
+// Add API explorer and Swagger generator
 builder.Services.AddEndpointsApiExplorer();
-
-// Add services to the container for Swagger
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1",
-    new OpenApiInfo
+    c.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = appTitle, // Set the title of the API
-        Version = appVersion, // Set the version of the API
-        Description = $"'{appDescription}' - '{appVersion}'", // Set the description of the API
-        Contact = new OpenApiContact // Set the contact information for the API
+        Title = appTitle,
+        Version = appVersion,
+        Description = $"{appDescription} - {appVersion}",
+        Contact = new OpenApiContact
         {
-            Name = "Everton David", // Set the name of the contact
-            Url = new Uri("https://github.com/evertondavid") // Set the URL of the contact
+            Name = "Everton David",
+            Url = new Uri("https://github.com/evertondavid")
         }
     });
 });
 
-// Add services to the container for MVC
+// Add MVC with support for XML and JSON formatters
 builder.Services.AddMvc(options =>
 {
     options.RespectBrowserAcceptHeader = true;
-    options.FormatterMappings.SetMediaTypeMappingForFormat("xml", "application/xml"); // Add support for XML
-    options.FormatterMappings.SetMediaTypeMappingForFormat("json", "application/json"); // Add support for JSON
+    options.FormatterMappings.SetMediaTypeMappingForFormat("xml", "application/xml");
+    options.FormatterMappings.SetMediaTypeMappingForFormat("json", "application/json");
 })
-.AddXmlSerializerFormatters(); // Add support for XML serialization in the MVC middleware
+.AddXmlSerializerFormatters();
 
-//HATEOAS
-var filterOptions = new HyperMediaFilterOptions(); // Create a new instance of the HyperMediaFilterOptions class
-filterOptions.ContentResponseEnricherList.Add(new PersonEnricher()); // Add a new instance of the PersonEnricher class to the ContentResponseEnricherList
-filterOptions.ContentResponseEnricherList.Add(new BookEnricher()); // Add a new instance of the BookEnricher class to the ContentResponseEnricherList
-builder.Services.AddSingleton(filterOptions); // Add the filterOptions instance to the container
+// HATEOAS Configuration
 
-var app = builder.Build(); // Create the application instance.
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment()) // Verify if the environment is development
+// Configure HyperMedia filters
+var filterOptions = new HyperMediaFilterOptions();
+filterOptions.ContentResponseEnricherList.Add(new PersonEnricher());
+filterOptions.ContentResponseEnricherList.Add(new BookEnricher());
+builder.Services.AddSingleton(filterOptions);
+
+var app = builder.Build();
+
+// Middleware Configuration
+
+// Configure middleware for development environment
+if (app.Environment.IsDevelopment())
 {
     _ = connection ?? throw new ArgumentNullException(nameof(connection), "Connection string cannot be null.");
-    MigrateDatabase(connection); // Migrate the database
+    MigrateDatabase(connection);
 
-    app.UseDeveloperExceptionPage(); // Adds a developer exception page to the pipeline
+    app.UseDeveloperExceptionPage();
 
-    app.UseSwagger(); // Enable middleware to serve generated Swagger as a JSON endpoint
-
+    app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", $"'{appDescription}' - '{appVersion}'"); // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint
-    }); // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint
-    var option = new RewriteOptions(); // Create a new instance of the RewriteOptions class
-    option.AddRedirect("^$", "swagger"); // Add a redirect rule to the RewriteOptions instance
-    app.UseRewriter(option); // Enable the middleware to use the RewriteOptions instance
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{appDescription} - {appVersion}");
+    });
+
+    var option = new RewriteOptions();
+    option.AddRedirect("^$", "swagger");
+    app.UseRewriter(option);
 }
 
-app.UseHttpsRedirection(); // Redirects HTTP requests to HTTPS
+// Enforce HTTPS
+app.UseHttpsRedirection();
 
-app.UseAuthorization(); // Enable authorization middleware
+// Enable CORS
+app.UseCors();
 
-app.MapControllers(); // Add the MVC middleware to the pipeline
+// Enable Authorization
+app.UseAuthorization();
 
-//HATEOAS
-app.MapControllerRoute("DefaultApi", "{controller=Values}/v{version:apiVersion}/{id?}"); // Add a route to the MVC middleware
+// Map controllers for MVC
+app.MapControllers();
 
-app.Run(); // Execute the application
+// Define default API route
+app.MapControllerRoute("DefaultApi", "{controller=Values}/v{version:apiVersion}/{id?}");
 
+app.Run();
+
+/// <summary>
+/// Migrates the database using Evolve.
+/// </summary>
+/// <param name="connection">Database connection string.</param>
 void MigrateDatabase(string connection)
 {
     try
@@ -109,7 +142,6 @@ void MigrateDatabase(string connection)
             {
                 Locations = new List<string> { "db/migrations", "db/dataset" },
                 IsEraseDisabled = true
-                //ValidateChecksums = false // Disable checksum validation
             };
             evolve.Migrate();
         }
