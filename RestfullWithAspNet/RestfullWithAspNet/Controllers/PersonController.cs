@@ -36,6 +36,10 @@ namespace RestfullWithAspNet.Controllers
         /// Maps GET requests to https://localhost:44300/api/person
         /// </remarks>
         [HttpGet]
+        [ProducesResponseType((200), Type = typeof(List<PersonVO>))]
+        [ProducesResponseType((204))]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
         [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Get()
         {
@@ -51,6 +55,10 @@ namespace RestfullWithAspNet.Controllers
         /// Maps GET requests to https://localhost:44300/api/person/{id}
         /// </remarks>
         [HttpGet("{id}")]
+        [ProducesResponseType((200), Type = typeof(PersonVO))]
+        [ProducesResponseType((204))]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
         [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Get(long id)
         {
@@ -69,6 +77,9 @@ namespace RestfullWithAspNet.Controllers
         /// [FromBody] tells the framework to serialize the request body to the person instance.
         /// </remarks>
         [HttpPost]
+        [ProducesResponseType((200), Type = typeof(PersonVO))]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
         [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Post([FromBody] PersonVO person)
         {
@@ -85,6 +96,10 @@ namespace RestfullWithAspNet.Controllers
         /// Maps PUT requests to https://localhost:44300/api/person
         /// </remarks>
         [HttpPut]
+        [ProducesResponseType((200), Type = typeof(PersonVO))]
+        [ProducesResponseType((204))]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
         [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Put([FromBody] PersonVO person)
         {
@@ -101,6 +116,9 @@ namespace RestfullWithAspNet.Controllers
         /// Maps DELETE requests to https://localhost:44300/api/person/{id}
         /// </remarks>
         [HttpDelete("{id}")]
+        [ProducesResponseType((204))]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
         public IActionResult Delete(long id)
         {
             _personBusiness.Delete(id);

@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using MySqlConnector;
 using RestfullWithAspNet.Business;
 using RestfullWithAspNet.Business.Implementations;
@@ -9,11 +11,17 @@ using RestfullWithAspNet.Repository;
 using RestfullWithAspNet.Repository.Generic;
 using Serilog;
 
+var appTitle = "RESTful API to Azure with ASP.NET Core 5 and Docker"; // Set the title of the application
+var appVersion = "1.0.0"; // Set the version of the application
+var appDescription = "RESTful API to Azure with ASP.NET Core 5 and Docker"; // Set the name of the application
 var builder = WebApplication.CreateBuilder(args);
+var connection = builder.Configuration.GetConnectionString("MySQLConnection"); // Get the connection string from the appsettings.json file
+
 // Add services to the container.
+builder.Services.AddRouting(options => options.LowercaseUrls = true); // Add services to the container for routing
+
 builder.Services.AddControllers(); // Adiciona serviços MVC ao container (Controllers, Views, TagHelpers, etc.)
 
-var connection = builder.Configuration.GetConnectionString("MySQLConnection"); // Get the connection string from the appsettings.json file
 builder.Services.AddDbContext<MySQLContext>(options =>
     options.UseMySql(connection, new MySqlServerVersion(new Version(5, 7, 44)))); // Add services to the container for Entity Framework Core, At version 3.2.0 we don't have to use MySqlServerVersion
 
@@ -29,7 +37,21 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>)); 
 builder.Services.AddEndpointsApiExplorer();
 
 // Add services to the container for Swagger
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1",
+    new OpenApiInfo
+    {
+        Title = appTitle, // Set the title of the API
+        Version = appVersion, // Set the version of the API
+        Description = $"'{appDescription}' - '{appVersion}'", // Set the description of the API
+        Contact = new OpenApiContact // Set the contact information for the API
+        {
+            Name = "Everton David", // Set the name of the contact
+            Url = new Uri("https://github.com/evertondavid") // Set the URL of the contact
+        }
+    });
+});
 
 // Add services to the container for MVC
 builder.Services.AddMvc(options =>
@@ -52,9 +74,18 @@ if (app.Environment.IsDevelopment()) // Verify if the environment is development
 {
     _ = connection ?? throw new ArgumentNullException(nameof(connection), "Connection string cannot be null.");
     MigrateDatabase(connection); // Migrate the database
+
     app.UseDeveloperExceptionPage(); // Adds a developer exception page to the pipeline
+
     app.UseSwagger(); // Enable middleware to serve generated Swagger as a JSON endpoint
-    app.UseSwaggerUI(); // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint
+
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", $"'{appDescription}' - '{appVersion}'"); // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint
+    }); // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint
+    var option = new RewriteOptions(); // Create a new instance of the RewriteOptions class
+    option.AddRedirect("^$", "swagger"); // Add a redirect rule to the RewriteOptions instance
+    app.UseRewriter(option); // Enable the middleware to use the RewriteOptions instance
 }
 
 app.UseHttpsRedirection(); // Redirects HTTP requests to HTTPS
