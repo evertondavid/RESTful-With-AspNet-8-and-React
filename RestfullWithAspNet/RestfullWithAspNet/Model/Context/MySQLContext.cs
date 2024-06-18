@@ -34,5 +34,10 @@ namespace RestfullWithAspNet.Model.Context
         /// </summary>
         public DbSet<Book> Books { get; set; }
 
+        /// <summary>
+        /// Gets or sets the collection of users in the database.
+        /// </summary>
+        public DbSet<User> Users { get; set; }
+
     }
 }
