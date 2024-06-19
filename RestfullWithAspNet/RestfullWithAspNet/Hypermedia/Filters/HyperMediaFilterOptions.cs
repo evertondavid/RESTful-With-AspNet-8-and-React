@@ -1,4 +1,4 @@
-using RestfullWithAspNet.Hypernedia.Abstract;
+using RestfullWithAspNet.Hypermedia.Abstract;
 
 namespace RestfullWithAspNet.Hypernedia.Filters
 {

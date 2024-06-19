@@ -1,4 +1,5 @@
 using RestfullWithAspNet.Data.VO;
+using RestfullWithAspNet.Model;
 using System.Collections.Generic; // Added using statement for List<T>
 
 namespace RestfullWithAspNet.Business
@@ -34,6 +35,13 @@ namespace RestfullWithAspNet.Business
         /// <param name="person">The person to be updated.</param>
         /// <returns>The person updated.</returns>
         PersonVO Update(PersonVO person);
+
+        /// <summary>
+        /// Disables a person.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        PersonVO Disable(long id);
 
         /// <summary>
         /// Delete a person by its ID.

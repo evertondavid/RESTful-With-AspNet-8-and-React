@@ -1,5 +1,7 @@
 
-namespace RestfullWithAspNet.Hypernedia.Abstract
+using RestfullWithAspNet.Hypermedia.Filters;
+
+namespace RestfullWithAspNet.Hypermedia.Abstract
 {
     /// <summary>
     /// Represents an interface for supporting hypermedia in a resource.

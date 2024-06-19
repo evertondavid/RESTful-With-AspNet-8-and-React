@@ -78,5 +78,23 @@ namespace RestfullWithAspNet.Model
                 _gender = value;
             }
         }
+
+        /// <summary>
+        /// Get or set the Enabled.
+        /// </summary>
+        private bool _enabled = true;
+        [Column("enabled")]
+        public bool Enabled
+        {
+            get => _enabled;
+            set
+            {
+                if (bool.Equals(value, null))
+                {
+                    throw new ArgumentException("Enabled cannot be null or empty.");
+                }
+                _enabled = value;
+            }
+        }
     }
 }

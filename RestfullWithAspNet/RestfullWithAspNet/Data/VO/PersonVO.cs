@@ -1,5 +1,5 @@
-using RestfullWithAspNet.Hypernedia;
-using RestfullWithAspNet.Hypernedia.Abstract;
+using RestfullWithAspNet.Hypermedia.Abstract;
+using RestfullWithAspNet.Hypermedia.Filters;
 
 namespace RestfullWithAspNet.Data.VO
 {
@@ -81,6 +81,26 @@ namespace RestfullWithAspNet.Data.VO
             }
         }
 
+        /// <summary>
+        /// Get or set the Enabled.
+        /// </summary>
+        private bool _enabled = true;
+        public bool Enabled
+        {
+            get => _enabled;
+            set
+            {
+                if (bool.Equals(value, null))
+                {
+                    throw new ArgumentException("Enabled cannot be null or empty.");
+                }
+                _enabled = value;
+            }
+        }
+
+        /// <summary>
+        /// Get or set the Hypermedia support.
+        /// </summary>
         public List<HyperMediaLink> Links { get; set; } = new List<HyperMediaLink>();
     }
 }

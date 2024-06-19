@@ -7,8 +7,9 @@
 // LaunchDate: represents the book's launch date.
 // Price: represents the book's price.
 
-using RestfullWithAspNet.Hypernedia;
-using RestfullWithAspNet.Hypernedia.Abstract;
+
+using RestfullWithAspNet.Hypermedia.Abstract;
+using RestfullWithAspNet.Hypermedia.Filters;
 
 namespace RestfullWithAspNet.Data.VO
 {

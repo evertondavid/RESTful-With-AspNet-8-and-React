@@ -2,9 +2,9 @@ using System.Collections.Concurrent;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Routing;
-using RestfullWithAspNet.Hypernedia.Abstract;
+using RestfullWithAspNet.Hypermedia.Abstract;
 
-namespace RestfullWithAspNet.Hypernedia
+namespace RestfullWithAspNet.Hypermedia.Filters
 {
     /// <summary>
     /// Base class for enriching content responses with hypermedia.

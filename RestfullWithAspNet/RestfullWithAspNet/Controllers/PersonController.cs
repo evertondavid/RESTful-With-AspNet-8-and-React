@@ -110,6 +110,24 @@ namespace RestfullWithAspNet.Controllers
         }
 
         /// <summary>
+        /// Disables a person by their ID.
+        /// </summary>
+        /// <param name="id">The ID of the person to be disabled.</param>
+        /// <returns>The disabled person.</returns>
+        /// <remarks>
+        /// Maps PATCH requests to https://localhost:44300/api/person/{id}
+        [HttpPatch("{id}")]
+        [ProducesResponseType((200), Type = typeof(PersonVO))]
+        [ProducesResponseType((204))]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
+        [TypeFilter(typeof(HyperMediaFilter))]
+        public IActionResult Patch(long id)
+        {
+            return Ok(_personBusiness.Disable(id));
+        }
+
+        /// <summary>
         /// Deletes a person by their ID.
         /// </summary>
         /// <param name="id">The ID of the person to be deleted.</param>

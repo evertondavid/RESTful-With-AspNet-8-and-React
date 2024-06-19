@@ -10,6 +10,7 @@ using MySqlConnector;
 using RestfullWithAspNet.Business;
 using RestfullWithAspNet.Business.Implementations;
 using RestfullWithAspNet.Configurations;
+using RestfullWithAspNet.Hypermedia.Enricher;
 using RestfullWithAspNet.Hypernedia.Enricher;
 using RestfullWithAspNet.Hypernedia.Filters;
 using RestfullWithAspNet.Model.Context;
@@ -60,6 +61,7 @@ builder.Services.AddScoped<IBookBusiness, BookBusinessImplementation>(); // Regi
 builder.Services.AddScoped<ILoginBusiness, LoginBusinessImplementation>(); // Register login business service
 builder.Services.AddTransient<ITokenService, TokenService>(); // Register token service
 builder.Services.AddScoped<IUserRepository, UserRepository>(); // Register user repository service
+builder.Services.AddScoped<IPersonRepository, PersonRepository>(); // Register person repository service
 
 // Register generic repository service
 builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
@@ -100,8 +102,6 @@ var filterOptions = new HyperMediaFilterOptions();
 filterOptions.ContentResponseEnricherList.Add(new PersonEnricher());
 filterOptions.ContentResponseEnricherList.Add(new BookEnricher());
 builder.Services.AddSingleton(filterOptions);
-
-
 
 // Configure token service from configuration file
 // Configure the token configurations by retrieving them from the configuration file

@@ -1,5 +1,5 @@
 
-namespace RestfullWithAspNet.Hypernedia.Constants
+namespace RestfullWithAspNet.Hypermedia.Constants
 {
     /// <summary>
     /// Represents the constants for relation types used in hypermedia links.

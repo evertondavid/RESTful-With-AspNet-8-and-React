@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace RestfullWithAspNet.Hypernedia.Abstract
+namespace RestfullWithAspNet.Hypermedia.Abstract
 {
     /// <summary>
     /// Represents an interface for response enrichers.

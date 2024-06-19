@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace RestfullWithAspNet.Hypernedia
+namespace RestfullWithAspNet.Hypermedia.Filters
 {
     /// <summary>
     /// Represents a hyperlink in a hypermedia response.

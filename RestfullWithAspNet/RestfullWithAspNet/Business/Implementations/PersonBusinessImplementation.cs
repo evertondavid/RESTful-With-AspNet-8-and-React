@@ -10,14 +10,14 @@ namespace RestfullWithAspNet.Business.Implementations
     /// </summary>
     public class PersonBusinessImplementation : IPersonBusiness
     {
-        private readonly IRepository<Person> _repository;
+        private readonly IPersonRepository _repository;
         private readonly PersonConverter _converter;
 
         /// <summary>
         /// Initializes a new instance of the PersonBusinessImplementation class.
         /// </summary>
         /// <param name="repository">The repository for accessing persons.</param>
-        public PersonBusinessImplementation(IRepository<Person> repository)
+        public PersonBusinessImplementation(IPersonRepository repository)
         {
             _repository = repository;
             _converter = new PersonConverter();
@@ -64,6 +64,17 @@ namespace RestfullWithAspNet.Business.Implementations
         {
             var personEntity = _converter.Parse(person); // Convert the VO to an Entity
             personEntity = _repository.Update(personEntity); // Update the entity in the database
+            return _converter.Parse(personEntity); // Convert the entity back to a VO
+        }
+
+        /// <summary>
+        /// Disables a person in the database.
+        /// </summary>
+        /// <param name="id">The ID of the person to disable.</param>
+        /// <returns>The disabled person, or a new Person if the original does not exist.</returns>
+        public PersonVO Disable(long id)
+        {
+            var personEntity = _repository.Disable(id); // Disable the person in the database
             return _converter.Parse(personEntity); // Convert the entity back to a VO
         }
 

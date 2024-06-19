@@ -1,5 +1,5 @@
 
-namespace RestfullWithAspNet.Hypernedia.Constants
+namespace RestfullWithAspNet.Hypermedia.Constants
 {
     /// <summary>
     /// Represents the response type formats for different HTTP methods.

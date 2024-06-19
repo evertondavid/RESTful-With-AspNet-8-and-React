@@ -1,28 +1,29 @@
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using RestfullWithAspNet.Data.VO;
-using RestfullWithAspNet.Hypernedia.Constants;
+using RestfullWithAspNet.Hypermedia.Constants;
+using RestfullWithAspNet.Hypermedia.Filters;
 
 namespace RestfullWithAspNet.Hypernedia.Enricher
 {
     /// <summary>
-    /// Enriches the PersonVO model with hypermedia links.
+    /// Enriches the BookVO model with hypermedia links.
     /// </summary>
-    public class PersonEnricher : ContentResponseEnricher<PersonVO>
+    public class BookEnricher : ContentResponseEnricher<BookVO>
     {
 
         /// <summary>
-        /// Enriches the PersonVO model with hypermedia links.
+        /// Enriches the BookVO model with hypermedia links.
         /// </summary>
-        /// <param name="content">The PersonVO model to enrich.</param>
+        /// <param name="content">The BookVO model to enrich.</param>
         /// <param name="urlHelper">The IUrlHelper instance for generating URLs.</param>
         /// <returns>A Task representing the asynchronous operation.</returns>
-        protected override Task EnrichModel(PersonVO content, IUrlHelper urlHelper)
+        protected override Task EnrichModel(BookVO content, IUrlHelper urlHelper)
         {
-            var path = "api/person";
+            var path = "api/book";
             string link = GetLink(content.Id, urlHelper, path);
 
-            // Add hypermedia links to the PersonVO model
+            // Add hypermedia links to the BookVO model
             content.Links.Add(new HyperMediaLink()
             {
                 Action = HttpActionVerb.GET,
@@ -51,14 +52,13 @@ namespace RestfullWithAspNet.Hypernedia.Enricher
                 Rel = RelationType.self,
                 Type = "int"
             });
-
             return Task.CompletedTask;
         }
 
         /// <summary>
         /// Gets the link for the specified id and path.
         /// </summary>
-        /// <param name="id">The id of the PersonVO model.</param>
+        /// <param name="id">The id of the BookVO model.</param>
         /// <param name="urlHelper">The IUrlHelper instance for generating URLs.</param>
         /// <param name="path">The path for the link.</param>
         /// <returns>The generated link.</returns>
