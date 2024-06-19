@@ -9,11 +9,11 @@ namespace RestfullWithAspNet.Data.VO
         /// <summary>
         /// Gets or sets the password of the user.
         /// </summary>
-        public string? Password { get; set; }
+        public required string Password { get; set; }
 
         /// <summary>
         /// Gets or sets the username of the user.
         /// </summary>
-        public string? UserName { get; set; }
+        public required string UserName { get; set; }
     }
 }

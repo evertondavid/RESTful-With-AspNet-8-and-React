@@ -64,7 +64,11 @@ namespace RestfullWithAspNet.Controllers
         [Authorize("Bearer")]
         public IActionResult Revoke()
         {
-            var userName = User.Identity.Name;
+            var userName = User.Identity?.Name;
+            if (string.IsNullOrEmpty(userName))
+            {
+                return BadRequest("User name is null or empty.");
+            }
             var result = _loginBusiness.RevokeToken(userName);
             if (!result) return BadRequest("Invalid client request");
             return NoContent();

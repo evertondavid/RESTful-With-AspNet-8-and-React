@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
 using RestfullWithAspNet.Configurations;
 using RestfullWithAspNet.Data.VO;
 using RestfullWithAspNet.Repository;
@@ -35,14 +36,14 @@ namespace RestfullWithAspNet.Business.Implementations
         /// </summary>
         /// <param name="userCredentials">The user credentials.</param>
         /// <returns>The token information.</returns>
-        public TokenVO ValidateCredentials(UserVO userCredentials)
+        public TokenVO? ValidateCredentials(UserVO userCredentials)
         {
             var user = _repository.ValidateCredentials(userCredentials);
             if (user == null) return null;
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("N")),
-                new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName)
+                new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName ?? string.Empty!)
             };
 
             var accessToken = _tokenService.GenerateAccessToken(claims);
@@ -76,12 +77,21 @@ namespace RestfullWithAspNet.Business.Implementations
             var refreshToken = token.RefreshToken;
 
             var principal = accessToken != null ? _tokenService.GetPrincipalFromExpiredToken(accessToken) : null;
+            if (accessToken != null)
+            {
+                principal = _tokenService.GetPrincipalFromExpiredToken(accessToken);
+            }
+
+            if (principal == null || principal.Identity?.Name == null)
+            {
+                throw new InvalidOperationException("Invalid principal or username.");
+            }
             var username = principal.Identity.Name;
-            var user = _repository.ValidateCredentials(username);
+            var user = username != null ? _repository.ValidateCredentials(username) : null;
 
             if (user == null ||
             user.RefreshToken != refreshToken ||
-            user.RefreshTokenExpiryTime <= DateTime.Now) return null;
+            user.RefreshTokenExpiryTime <= DateTime.Now) throw new SecurityTokenException("Invalid credentials.");
 
             accessToken = _tokenService.GenerateAccessToken(principal.Claims);
             refreshToken = _tokenService.GenerateRefreshToken();

@@ -14,7 +14,7 @@ namespace RestfullWithAspNet.Model
         /// </summary>
         [Key]
         [Column("id")]
-        public long Id { get; set; }
+        public long? Id { get; set; }
 
         /// <summary>
         /// Gets or sets the username of the user.
@@ -44,6 +44,6 @@ namespace RestfullWithAspNet.Model
         /// Gets or sets the expiry time of the refresh token.
         /// </summary>
         [Column("refresh_token_expiry_time")]
-        public DateTime RefreshTokenExpiryTime { get; set; }
+        public DateTime? RefreshTokenExpiryTime { get; set; }
     }
 }

@@ -120,6 +120,10 @@ builder.Services.AddAuthentication(options =>
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
 {
+    if (string.IsNullOrEmpty(tokenConfigurations.Secret))
+    {
+        throw new ArgumentNullException(nameof(tokenConfigurations.Secret), "The secret key cannot be null or empty.");
+    }
     // Configure the token validation parameters
     options.TokenValidationParameters = new TokenValidationParameters
     {
@@ -140,8 +144,7 @@ builder.Services.AddAuthorization(auth =>
         .RequireAuthenticatedUser().Build());
 });
 
-
-
+// Configure Serilog for logging
 var app = builder.Build();
 
 // Middleware Configuration

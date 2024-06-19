@@ -10,9 +10,9 @@ namespace RestfullWithAspNet.Hypernedia
         /// <summary>
         /// Gets or sets the relationship of the hyperlink to the current resource.
         /// </summary>
-        public string Rel { get; set; }
+        public string? Rel { get; set; }
 
-        private string href;
+        private string? href;
 
         /// <summary>
         /// Gets or sets the target URL of the hyperlink.
@@ -34,11 +34,11 @@ namespace RestfullWithAspNet.Hypernedia
         /// <summary>
         /// Gets or sets the media type of the target resource.
         /// </summary>
-        public string Type { get; set; }
+        public string? Type { get; set; }
 
         /// <summary>
         /// Gets or sets the action associated with the hyperlink.
         /// </summary>
-        public string Action { get; set; }
+        public string? Action { get; set; }
     }
 }

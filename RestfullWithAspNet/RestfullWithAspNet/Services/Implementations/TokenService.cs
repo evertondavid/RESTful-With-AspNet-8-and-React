@@ -23,6 +23,10 @@ namespace RestfullWithAspNet.Services.Implementations
         /// <returns>The generated access token.</returns>
         public string GenerateAccessToken(IEnumerable<Claim> claims)
         {
+            if (string.IsNullOrEmpty(_configuration.Secret))
+            {
+                throw new ArgumentNullException(nameof(_configuration.Secret), "The secret key cannot be null or empty.");
+            }
             var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.Secret));
             var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
@@ -58,6 +62,10 @@ namespace RestfullWithAspNet.Services.Implementations
         /// <returns>The principal extracted from the token.</returns>
         public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
         {
+            if (string.IsNullOrEmpty(_configuration.Secret))
+            {
+                throw new ArgumentNullException(nameof(_configuration.Secret), "The secret key cannot be null or empty.");
+            }
             var tokenValidationParameters = new TokenValidationParameters
             {
                 ValidateAudience = false, // you might want to validate the audience and issuer depending on your use case

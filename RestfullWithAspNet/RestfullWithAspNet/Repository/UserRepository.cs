@@ -29,8 +29,20 @@ namespace RestfullWithAspNet.Repository
         /// <returns>The validated user or null if the credentials are invalid.</returns>
         public User ValidateCredentials(UserVO user)
         {
-            var pass = ComputeHash(user.Password, SHA256.Create());
-            return _context.Users.FirstOrDefault(u => (u.UserName == user.UserName) && (u.Password == pass));
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user), "User cannot be null.");
+            }
+            else if (string.IsNullOrEmpty(user.UserName))
+            {
+                throw new ArgumentNullException(nameof(user.UserName), "Username cannot be null or empty.");
+            }
+            else
+            {
+                var pass = ComputeHash(user.Password, SHA256.Create());
+                var foundUser = _context.Users.FirstOrDefault(u => u.UserName == user.UserName && u.Password == pass);
+                return foundUser ?? throw new InvalidOperationException("User not found or invalid credentials.");
+            }
         }
 
         /// <summary>
@@ -40,7 +52,8 @@ namespace RestfullWithAspNet.Repository
         /// <returns></returns>
         public User ValidateCredentials(string userName)
         {
-            return _context.Users.SingleOrDefault(u => u.UserName == userName);
+            var userCredentials = _context.Users.SingleOrDefault(u => u.UserName == userName);
+            return userCredentials ?? throw new InvalidOperationException("User not found.");
         }
 
         /// <summary>
@@ -66,7 +79,8 @@ namespace RestfullWithAspNet.Repository
         /// <returns>The updated user entity or null if the user does not exist.</returns>
         public User RefreshUserInfo(User user)
         {
-            if (!_context.Users.Any(u => u.Id.Equals(user.Id))) return null;
+            var userExists = _context.Users.Any(u => u.Id.Equals(user.Id));
+            if (!userExists) throw new InvalidOperationException("User not found.");
 
             var result = _context.Users.SingleOrDefault(p => p.Id.Equals(user.Id));
             if (result != null)
@@ -84,7 +98,7 @@ namespace RestfullWithAspNet.Repository
             }
             else
             {
-                return result;
+                return result ?? throw new InvalidOperationException("User not found.");
             }
         }
 
@@ -94,7 +108,7 @@ namespace RestfullWithAspNet.Repository
         /// <param name="input"></param>
         /// <param name="algorithm"></param>
         /// <returns></returns>
-        private object ComputeHash(string input, HashAlgorithm algorithm)
+        private string ComputeHash(string input, HashAlgorithm algorithm)
         {
             byte[] inputBytes = Encoding.UTF8.GetBytes(input);
             byte[] hashedBytes = algorithm.ComputeHash(inputBytes);

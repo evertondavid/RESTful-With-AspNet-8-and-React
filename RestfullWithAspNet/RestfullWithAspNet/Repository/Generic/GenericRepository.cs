@@ -40,14 +40,7 @@ namespace RestfullWithAspNet.Repository.Generic
         public T FindById(long id)
         {
             var result = dataset.SingleOrDefault(p => p.Id.Equals(id));
-            if (result != null)
-            {
-                return result;
-            }
-            else
-            {
-                return null;
-            }
+            return result ?? throw new Exception("Entity not found.");
         }
 
         /// <summary>
@@ -92,7 +85,7 @@ namespace RestfullWithAspNet.Repository.Generic
             }
             else
             {
-                return null;
+                throw new Exception("Entity not found.");
             }
         }
 

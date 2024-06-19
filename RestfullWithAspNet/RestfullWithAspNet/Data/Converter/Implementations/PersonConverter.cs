@@ -1,8 +1,6 @@
 using RestfullWithAspNet.Data.Converter.Contract;
 using RestfullWithAspNet.Data.VO;
 using RestfullWithAspNet.Model;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace RestfullWithAspNet.Data.Converter.Implementations
 {
@@ -16,36 +14,35 @@ namespace RestfullWithAspNet.Data.Converter.Implementations
         /// </summary>
         /// <param name="origin">The PersonVO object to be converted.</param>
         /// <returns>The converted Person entity.</returns>
-        public Person Parse(PersonVO origin)
+        public Person Parse(PersonVO origin) =>
+        origin == null
+        ? throw new ArgumentNullException(nameof(origin), "The origin cannot be null.")
+        : new Person
         {
-            if (origin == null) return null;
-            return new Person
-            {
-                Id = origin.Id,
-                FirstName = origin.FirstName,
-                LastName = origin.LastName,
-                Address = origin.Address,
-                Gender = origin.Gender
-            };
-        }
+            Id = origin.Id,
+            FirstName = origin.FirstName,
+            LastName = origin.LastName,
+            Address = origin.Address,
+            Gender = origin.Gender
+        };
+
 
         /// <summary>
         /// Converts a Person entity to a PersonVO object.
         /// </summary>
         /// <param name="origin">The Person entity to be converted.</param>
         /// <returns>The converted PersonVO object.</returns>
-        public PersonVO Parse(Person origin)
+        public PersonVO Parse(Person origin) =>
+        origin == null
+        ? throw new ArgumentNullException(nameof(origin), "The origin cannot be null.")
+        : new PersonVO
         {
-            if (origin == null) return null;
-            return new PersonVO
-            {
-                Id = origin.Id,
-                FirstName = origin.FirstName,
-                LastName = origin.LastName,
-                Address = origin.Address,
-                Gender = origin.Gender
-            };
-        }
+            Id = origin.Id,
+            FirstName = origin.FirstName,
+            LastName = origin.LastName,
+            Address = origin.Address,
+            Gender = origin.Gender
+        };
 
         /// <summary>
         /// Converts a list of PersonVO objects to a list of Person entities.
@@ -54,7 +51,7 @@ namespace RestfullWithAspNet.Data.Converter.Implementations
         /// <returns>The converted list of Person entities.</returns>
         public List<Person> Parse(List<PersonVO> origin)
         {
-            if (origin == null) return null;
+            if (origin == null) throw new ArgumentNullException(nameof(origin), "The origin list cannot be null.");
             return origin.Select(item => Parse(item)).ToList();
         }
 
@@ -65,7 +62,7 @@ namespace RestfullWithAspNet.Data.Converter.Implementations
         /// <returns>The converted list of PersonVO objects.</returns>
         public List<PersonVO> Parse(List<Person> origin)
         {
-            if (origin == null) return null;
+            if (origin == null) throw new ArgumentNullException(nameof(origin), "The origin list cannot be null.");
             return origin.Select(item => Parse(item)).ToList();
         }
     }

@@ -36,7 +36,7 @@ namespace RestfullWithAspNet.Hypernedia
 
         bool IResponseEnricher.CanEnrich(ResultExecutingContext response)
         {
-            if (response.Result is OkObjectResult okObjectResult)
+            if (response.Result is OkObjectResult okObjectResult && okObjectResult.Value != null)
             {
                 return CanEnrich(okObjectResult.Value.GetType());
             }
