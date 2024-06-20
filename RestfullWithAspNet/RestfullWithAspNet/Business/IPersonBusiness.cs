@@ -1,6 +1,5 @@
 using RestfullWithAspNet.Data.VO;
-using RestfullWithAspNet.Model;
-using System.Collections.Generic; // Added using statement for List<T>
+using RestfullWithAspNet.Hypermedia.Utils;
 
 namespace RestfullWithAspNet.Business
 {
@@ -24,10 +23,37 @@ namespace RestfullWithAspNet.Business
         PersonVO FindById(long id);
 
         /// <summary>
+        /// Find people by name.
+        /// </summary>
+        /// <param name="firstName">The first name to search for.</param>
+        /// <param name="lastName">The last name to search for.</param>
+        /// <returns>A list of people matching the specified first name and last name.</returns>
+        List<PersonVO> FindByName(string firstName, string lastName);
+
+        /// <summary>
         /// Find all people.
         /// </summary>
         /// <returns>List of people.</returns>
         List<PersonVO> FindAll(); // Added return type List<PersonVO>
+
+        /// <summary>
+        /// Find people with a paged search.
+        /// </summary>
+        /// <param name="sortDirection">The sort direction.</param>
+        /// <param name="pageSize">The page size.</param>
+        /// <param name="page">The page number.</param>
+        /// <returns>A paged search result.</returns>
+        PagedSearchVO<PersonVO> FindWithPagedSearch(string sortDirection, int pageSize, int page);
+
+        /// <summary>
+        /// Find people with a paged search.
+        /// </summary>
+        /// <param name="name">The name to search for.</param>
+        /// <param name="sortDirection">The sort direction.</param>
+        /// <param name="pageSize">The page size.</param>
+        /// <param name="page">The page number.</param>
+        /// <returns>A paged search result.</returns>
+        PagedSearchVO<PersonVO> FindWithPagedSearch(string name, string sortDirection, int pageSize, int page);
 
         /// <summary>
         /// Updates a person.

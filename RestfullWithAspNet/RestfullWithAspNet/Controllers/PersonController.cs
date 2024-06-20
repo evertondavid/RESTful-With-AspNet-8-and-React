@@ -30,6 +30,7 @@ namespace RestfullWithAspNet.Controllers
             _personBusiness = personBusiness;
         }
 
+        /* Disabled after implemented Find With Paged Search
         /// <summary>
         /// Gets all people.
         /// </summary>
@@ -46,6 +47,34 @@ namespace RestfullWithAspNet.Controllers
         public IActionResult Get()
         {
             return Ok(_personBusiness.FindAll());
+        }
+        */
+
+        /// <summary>
+        /// Gets all people with a paged search.
+        /// </summary>
+        /// <param name="name">The name to search for.</param>
+        /// <param name="sortDirection">The sort direction.</param>
+        /// <param name="pageSize">The page size.</param>
+        /// <param name="page">The page number.</param>
+        /// <returns>A paged search result.</returns>
+        [HttpGet("{sortDirection}/{pageSize}/{page}")]
+        [ProducesResponseType((200), Type = typeof(List<PersonVO>))]
+        [ProducesResponseType((204))]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
+        [TypeFilter(typeof(HyperMediaFilter))]
+        public IActionResult Get(
+            [FromQuery] string? name,
+            string sortDirection,
+            int pageSize,
+            int page)
+        {
+            if (name == null)
+            {
+                return Ok(_personBusiness.FindWithPagedSearch(sortDirection, pageSize, page));
+            }
+            return Ok(_personBusiness.FindWithPagedSearch(name, sortDirection, pageSize, page));
         }
 
         /// <summary>
@@ -65,6 +94,25 @@ namespace RestfullWithAspNet.Controllers
         public IActionResult Get(long id)
         {
             var person = _personBusiness.FindById(id);
+            if (person == null) return NotFound();
+            return Ok(person);
+        }
+
+        /// <summary>
+        /// Gets a person by their first and last name.
+        /// </summary>
+        /// <param name="firstName">The first name of the person.</param>
+        /// <param name="lastName">The last name of the person.</param>
+        /// <returns>The person with the specified first and last name.</returns>
+        [HttpGet("findPersonByName")]
+        [ProducesResponseType((200), Type = typeof(List<PersonVO>))]
+        [ProducesResponseType((204))]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
+        [TypeFilter(typeof(HyperMediaFilter))]
+        public IActionResult Get([FromQuery] string? firstName, [FromQuery] string? lastName)
+        {
+            var person = _personBusiness.FindByName(firstName!, lastName!);
             if (person == null) return NotFound();
             return Ok(person);
         }

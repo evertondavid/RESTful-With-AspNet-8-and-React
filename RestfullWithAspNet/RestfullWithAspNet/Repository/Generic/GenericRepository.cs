@@ -119,5 +119,36 @@ namespace RestfullWithAspNet.Repository.Generic
         {
             return dataset.Any(p => p.Id.Equals(id));
         }
+
+        /// <summary>
+        /// Finds entities with a paged search.
+        /// </summary>
+        /// <param name="query">The query to search for.</param>
+        /// <returns>A list of entities.</returns>
+        public List<T> FindWithPagedSearch(string query)
+        {
+            return dataset.FromSqlRaw<T>(query).ToList();
+        }
+
+        /// <summary>
+        /// Gets the count of entities with a paged search.
+        /// </summary>
+        /// <param name="query">The query to search for.</param>
+        /// <returns>The count of entities.</returns>
+        public int GetCount(string query)
+        {
+            var result = "";
+            using (var connection = _context.Database.GetDbConnection())
+            {
+                connection.Open();
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = query;
+                    var scalarResult = command.ExecuteScalar();
+                    result = scalarResult?.ToString() ?? throw new Exception("Count not found.");
+                }
+            }
+            return int.TryParse(result, out int count) ? count : throw new Exception("Count not found.");
+        }
     }
 }

@@ -1,6 +1,6 @@
 using RestfullWithAspNet.Data.Converter.Implementations;
 using RestfullWithAspNet.Data.VO;
-using RestfullWithAspNet.Model;
+using RestfullWithAspNet.Hypermedia.Utils;
 using RestfullWithAspNet.Repository;
 
 namespace RestfullWithAspNet.Business.Implementations
@@ -33,6 +33,80 @@ namespace RestfullWithAspNet.Business.Implementations
         }
 
         /// <summary>
+        /// Retrieves all persons from the database with a paged search.
+        /// </summary>
+        /// <param name="sortDirection">The sort direction.</param>
+        /// <param name="pageSize">The page size.</param>
+        /// <param name="page">The page number.</param>
+        /// <returns>A paged search result.</returns>
+        /// <remarks>
+        /// This method is implemented in the repository, but the logic is here.
+        /// </remarks>
+        public PagedSearchVO<PersonVO> FindWithPagedSearch(string sortDirection, int pageSize, int page)
+        {
+            var name = "";
+            var sort = (!string.IsNullOrWhiteSpace(sortDirection) && !sortDirection.Equals("desc")) ? "asc" : "desc"; // Default to ascending if not specified or invalid
+            var size = (pageSize < 1) ? 10 : pageSize;
+            var offset = page > 0 ? (page - 1) * size : 0;
+
+            var query = @"select * from person p where 1 = 1";
+            if (!string.IsNullOrWhiteSpace(name)) query += $" and p.first_name like '%{name}%'";
+            query += $" order by p.first_name {sort} limit {size} offset {offset}";
+
+            var countQuery = @"select count(*) from person p where 1 = 1";
+            if (!string.IsNullOrWhiteSpace(name)) countQuery += $" and p.first_name like '%{name}%'";
+
+            var persons = _repository.FindWithPagedSearch(query);
+            int totalResults = _repository.GetCount(countQuery);
+
+            return new PagedSearchVO<PersonVO>
+            {
+                CurrentPage = page,
+                List = _converter.Parse(persons),
+                PageSize = size,
+                SortDirections = sort,
+                TotalResults = totalResults
+            };
+        }
+
+        /// <summary>
+        /// Retrieves all persons from the database with a paged search.
+        /// </summary>
+        /// <param name="name">The name to search for.</param>
+        /// <param name="sortDirection">The sort direction.</param>
+        /// <param name="pageSize">The page size.</param>
+        /// <param name="page">The page number.</param>
+        /// <returns>A paged search result.</returns>
+        /// <remarks>
+        /// This method is implemented in the repository, but the logic is here.
+        /// </remarks>
+        public PagedSearchVO<PersonVO> FindWithPagedSearch(string name, string sortDirection, int pageSize, int page)
+        {
+            var sort = (!string.IsNullOrWhiteSpace(sortDirection) && !sortDirection.Equals("desc")) ? "asc" : "desc"; // Default to ascending if not specified or invalid
+            var size = (pageSize < 1) ? 10 : pageSize;
+            var offset = page > 0 ? (page - 1) * size : 0;
+
+            var query = @"select * from person p where 1 = 1";
+            if (!string.IsNullOrWhiteSpace(name)) query += $" and p.first_name like '%{name}%'";
+            query += $" order by p.first_name {sort} limit {size} offset {offset}";
+
+            var countQuery = @"select count(*) from person p where 1 = 1";
+            if (!string.IsNullOrWhiteSpace(name)) countQuery += $" and p.first_name like '%{name}%'";
+
+            var persons = _repository.FindWithPagedSearch(query);
+            int totalResults = _repository.GetCount(countQuery);
+
+            return new PagedSearchVO<PersonVO>
+            {
+                CurrentPage = page,
+                List = _converter.Parse(persons),
+                PageSize = size,
+                SortDirections = sort,
+                TotalResults = totalResults
+            };
+        }
+
+        /// <summary>
         /// Finds a person by their ID.
         /// </summary>
         /// <param name="id">The ID of the person to find.</param>
@@ -41,6 +115,17 @@ namespace RestfullWithAspNet.Business.Implementations
         {
             var person = _repository.FindById(id);
             return _converter.Parse(person) ?? throw new KeyNotFoundException($"The person with ID: {id} was not found.");
+        }
+
+        /// <summary>
+        /// Finds people by their first name and last name.
+        /// </summary>
+        /// <param name="firstName">The first name to search for.</param>
+        /// <param name="lastName">The last name to search for.</param>
+        /// <returns>A list of people matching the specified first name and last name.</returns>
+        public List<PersonVO> FindByName(string firstName, string lastName)
+        {
+            return _converter.Parse(_repository.FindByName(firstName, lastName));
         }
 
         /// <summary>
@@ -86,5 +171,6 @@ namespace RestfullWithAspNet.Business.Implementations
         {
             _repository.Delete(id);
         }
+
     }
 }

@@ -47,5 +47,19 @@ namespace RestfullWithAspNet.Repository
         /// <param name="id">The ID of the item to check.</param>
         /// <returns>True if the item exists, false otherwise.</returns>
         bool Exists(long id);
+
+        /// <summary>
+        /// Finds items with a paged search.
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        List<T> FindWithPagedSearch(string query);
+
+        /// <summary>
+        /// Gets the count of items with a paged search.
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        int GetCount(string query);
     }
 }
