@@ -56,7 +56,7 @@ To get a local copy up and running, follow these simple steps.
 2. **Start the application:**
    Copy code: dotnet run
 
-   Open your browser and navigate to https://localhost:5001 to view the application.
+   Open your browser and navigate to http://localhost:44300/swagger/index.html to view the application.
 
 ### Contributing
    Contributions are welcome! Please fork this repository and submit pull requests with any improvements.

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -56,6 +57,8 @@ builder.Services.AddApiVersioning();
 // Dependency Injection Configuration
 
 // Register business services
+builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>(); // Register HTTP context accessor
+builder.Services.AddScoped<IFileBusiness, FileBusinessImplementation>(); // Register file business service
 builder.Services.AddScoped<IPersonBusiness, PersonBusinessImplementation>(); // Register person business service
 builder.Services.AddScoped<IBookBusiness, BookBusinessImplementation>(); // Register book business service
 builder.Services.AddScoped<ILoginBusiness, LoginBusinessImplementation>(); // Register login business service
