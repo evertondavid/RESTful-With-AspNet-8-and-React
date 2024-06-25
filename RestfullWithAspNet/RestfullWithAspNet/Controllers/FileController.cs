@@ -42,6 +42,23 @@ namespace RestfullWithAspNet.Controllers
             return new OkObjectResult(detail);
         }
 
+
+        /// <summary>
+        ///  Save multiple files to disk and return the file details
+        /// </summary>
+        /// <param name="file">File to be saved</param>
+        /// <returns>File details</returns>
+        [HttpPost("uploadFileToDatabase")]
+        [ProducesResponseType((200), Type = typeof(FileDetailVO))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [Produces("application/json", "application/xml")]
+        public async Task<IActionResult> UploadOneFileToDatabase([FromForm] IFormFile file)
+        {
+            FileDetailVO detail = await _fileBusiness.SaveFileToDatabase(file);
+            return new OkObjectResult(detail);
+        }
+
         /// <summary>
         /// Save multiple files to disk and return the file details
         /// </summary>
@@ -59,7 +76,7 @@ namespace RestfullWithAspNet.Controllers
         }
 
         /// <summary>
-        /// Download a file from the disk based on the provided filename
+        /// Download a file from the disk
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>

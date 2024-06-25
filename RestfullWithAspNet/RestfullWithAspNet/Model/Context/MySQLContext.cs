@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using RestfullWithAspNet.Data.VO;
 
 namespace RestfullWithAspNet.Model.Context
 {
@@ -39,5 +40,9 @@ namespace RestfullWithAspNet.Model.Context
         /// </summary>
         public DbSet<User> Users { get; set; }
 
+        /// <summary>
+        /// Gets or sets the collection of file details in the database.
+        /// </summary>
+        public DbSet<FileDetailVO> FileDetails { get; set; } // Add this line
     }
 }

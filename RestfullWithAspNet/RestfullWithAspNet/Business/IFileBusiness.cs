@@ -17,5 +17,8 @@ namespace RestfullWithAspNet.Business
 
         // Saves multiple files to the disk and returns the file details for each file
         public Task<List<FileDetailVO>> SaveFilesToDisk(IList<IFormFile> files);
+
+        // Saves a file to the database and returns the file details
+        public Task<FileDetailVO> SaveFileToDatabase(IFormFile file);
     }
 }
