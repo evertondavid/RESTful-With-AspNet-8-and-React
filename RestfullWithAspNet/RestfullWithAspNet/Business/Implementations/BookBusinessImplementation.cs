@@ -1,5 +1,6 @@
 using RestfullWithAspNet.Data.Converter.Implementations;
 using RestfullWithAspNet.Data.VO;
+using RestfullWithAspNet.Hypermedia.Utils;
 using RestfullWithAspNet.Model;
 using RestfullWithAspNet.Repository;
 
@@ -30,6 +31,42 @@ namespace RestfullWithAspNet.Business.Implementations
         public List<BookVO> FindAll()
         {
             return _converter.Parse(_repository.FindAll());
+        }
+
+        /// <summary>
+        /// Finds books with pagination.
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="srtDirection"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="page"></param>
+        /// <returns></returns>
+        public PagedSearchVO<BookVO> FindWithPagedSearch(
+            string title, string srtDirection, int pageSize, int page)
+        {
+            var sort = (!string.IsNullOrWhiteSpace(srtDirection) && !srtDirection.Equals("desc")) ? "asc" : "desc";
+            var size = pageSize == 0 ? 10 : pageSize;
+            var offset = page > 0 ? (page - 1) * size : 0;
+
+            string query = @"select * from book b where 1 = 1 ";
+            if (!string.IsNullOrWhiteSpace(title)) query += $" and b.title like '%{title}%'";
+
+            query += $" order by b.title {sort} limit {size} offset {offset}";
+
+            string countQuery = @"select count(*) from book b where 1 = 1 ";
+            if (!string.IsNullOrWhiteSpace(title)) countQuery += $" and b.title like '%{title}%'";
+
+            var books = _repository.FindWithPagedSearch(query);
+            int totalResults = _repository.GetCount(countQuery);
+
+            return new PagedSearchVO<BookVO>
+            {
+                CurrentPage = page,
+                List = _converter.Parse(books),
+                PageSize = size,
+                SortDirections = sort,
+                TotalResults = totalResults
+            };
         }
 
         /// <summary>

@@ -38,16 +38,21 @@ namespace RestfullWithAspNet.Controllers
         /// Sample request:
         ///     GET /api/book
         /// </remarks>
-        [HttpGet]
+        [HttpGet("{srtDirection}/{pageSize}/{page}")]
         [ProducesResponseType((200), Type = typeof(List<BookVO>))]
         [ProducesResponseType((204))]
         [ProducesResponseType((400))]
         [ProducesResponseType((401))]
         [TypeFilter(typeof(HyperMediaFilter))]
-        public IActionResult Get()
+        public IActionResult Get(
+            [FromQuery] string title,
+            string srtDirection,
+            int pageSize,
+            int page)
         {
-            return Ok(_bookBusiness.FindAll());
+            return Ok(_bookBusiness.FindWithPagedSearch(title, srtDirection, pageSize, page));
         }
+
 
         /// <summary>
         /// Gets a book by its ID.

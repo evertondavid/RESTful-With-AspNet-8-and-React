@@ -1,5 +1,5 @@
 using RestfullWithAspNet.Data.VO;
-using System.Collections.Generic; // Added using statement for List<T>
+using RestfullWithAspNet.Hypermedia.Utils;
 
 namespace RestfullWithAspNet.Business
 {
@@ -27,6 +27,8 @@ namespace RestfullWithAspNet.Business
         /// </summary>
         /// <returns>List of books.</returns>
         List<BookVO> FindAll(); // Updated comment to reflect that it returns a list of books
+
+        PagedSearchVO<BookVO> FindWithPagedSearch(string title, string srtDirection, int pageSize, int page);
 
         /// <summary>
         /// Updates a book.
