@@ -42,7 +42,7 @@ namespace RestfullWithAspNet.Business.Implementations
         /// <param name="page"></param>
         /// <returns></returns>
         public PagedSearchVO<BookVO> FindWithPagedSearch(
-            string title, string srtDirection, int pageSize, int page)
+            string? title, string srtDirection, int pageSize, int page)
         {
             var sort = (!string.IsNullOrWhiteSpace(srtDirection) && !srtDirection.Equals("desc")) ? "asc" : "desc";
             var size = pageSize == 0 ? 10 : pageSize;

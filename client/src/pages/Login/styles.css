@@ -15,7 +15,7 @@
 }
 
 .login-container section.form img {
-    margin-top: 65px;
+    width: 65%;
     margin-left: auto;
     margin-right: auto;
     display: block;
@@ -25,7 +25,14 @@
     margin-top: 100px;
 }
 
-.login-container section.form h1 {
+.login-container section.form form h1 {
     font-size: 32px;
     margin: 64px 0 32px;
+}
+
+.login-container img {
+    width: 40%;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
 }

@@ -23,9 +23,9 @@ using Serilog;
 
 // Application metadata
 var appAspNetVersion = "7.0";
-var appTitle = $"RESTful API to Azure with ASP.NET '{appAspNetVersion}' and Docker";
+var appTitle = $"RESTful API to Azure with ASP.NET '{appAspNetVersion}'.";
 var appVersion = "1.0.0";
-var appDescription = $"RESTful API to Azure with ASP.NET '{appAspNetVersion}' and Docker";
+var appDescription = $"RESTful API to Azure with ASP.NET '{appAspNetVersion}'.";
 
 var builder = WebApplication.CreateBuilder(args);
 var connection = builder.Configuration.GetConnectionString("MySQLConnection");

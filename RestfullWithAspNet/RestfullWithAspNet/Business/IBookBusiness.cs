@@ -28,7 +28,7 @@ namespace RestfullWithAspNet.Business
         /// <returns>List of books.</returns>
         List<BookVO> FindAll(); // Updated comment to reflect that it returns a list of books
 
-        PagedSearchVO<BookVO> FindWithPagedSearch(string title, string srtDirection, int pageSize, int page);
+        PagedSearchVO<BookVO> FindWithPagedSearch(string? title, string srtDirection, int pageSize, int page);
 
         /// <summary>
         /// Updates a book.

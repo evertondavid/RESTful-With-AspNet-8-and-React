@@ -45,7 +45,7 @@ namespace RestfullWithAspNet.Controllers
         [ProducesResponseType((401))]
         [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Get(
-            [FromQuery] string title,
+            [FromQuery] string? title,
             string srtDirection,
             int pageSize,
             int page)

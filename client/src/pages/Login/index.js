@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
-import './styles.css';
-
 import logoImage from '../../assets/logo.svg';
 import padlock from '../../assets/padlock.png';
+import '../../global.css';
+import './styles.css';
 
 export default function Login() {
     const [userName, setUsername] = useState(''); // State to store username
@@ -19,7 +19,8 @@ export default function Login() {
             localStorage.setItem('userName', userName); // Save username in the browser's local storage
             localStorage.setItem('accessToken', response.data.accessToken); // Save access token in the browser's local storage
             localStorage.setItem('refreshToken', response.data.refreshToken); // Save refresh token in the browser's local storage
-
+            //debugger;
+            console.log(response);
             navigate('/books'); // Redirect user to the profile page
         } catch (err) {
             alert('Login failed. Try again.'); // Alert the user if login fails

@@ -6,8 +6,6 @@ import Routes from './routes';
 // Inject JavaScript code into JSX using curly braces {}
 export default function App() {
   return (
-    <div>
-      <Routes />
-    </div>
+    <Routes />
   );
 }
