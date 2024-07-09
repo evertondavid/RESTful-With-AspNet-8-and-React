@@ -1,8 +1,8 @@
-# ASP.NET Core API Restful with Docker
+# ASP.NET Core API Restful with React
 
 ## Project Overview
 
-This project is a RESTful API developed using ASP.NET Core, designed to showcase best practices in building scalable web APIs. It features a MySQL database, utilizes ASP.NET Versioning, Evolve for database migrations, and Serilog for logging. This API is fully equipped with Swagger for API documentation, supports XML format, HATEOAS, CORS, and JWT for authentication. Enhancements such as Docker support, GitHub Actions integration, and multi-database compatibility are currently in progress.
+This project is a RESTful API developed using ASP.NET Core, designed to showcase best practices in building scalable web APIs. It features a MySQL database, utilizes ASP.NET Versioning, Evolve for database migrations, and Serilog for logging. This API is fully equipped with Swagger for API documentation, supports XML format, HATEOAS, CORS, and JWT for authentication. Enhancements such as GitHub Actions integration, and multi-database compatibility are currently in progress.
 
 ### Key Features:
 
@@ -13,7 +13,6 @@ This project is a RESTful API developed using ASP.NET Core, designed to showcase
 - **Security**: Implements JWT-based authentication to secure endpoints.
 - **Advanced Query Capabilities**: Supports query parameters and paged search for effective data fetching.
 - **File Handling**: Handling file uploads and downloads (in progress).
-- **Docker Support**: Containerization of the application (in progress).
 
 ## Technologies
 
@@ -23,7 +22,6 @@ This project is a RESTful API developed using ASP.NET Core, designed to showcase
 - **ASP.NET Versioning.Mvc**: For API version control
 - **Serilog**: For logging
 - **Swagger**: API documentation and exploration tool
-- **Docker**: For application containerization (in progress)
 - **React.js**: Frontend framework (in progress)
 
 ## Architecture
@@ -44,14 +42,13 @@ To get a local copy up and running, follow these simple steps.
 
 - .NET 6 SDK
 - MySQL Server
-- Docker (for containerization features)
 - Node.js and npm (for React.js development)
 
 ### How to Run the Project
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/evertondavid/RESTful-With-AspNet-7-and-Docker.git
+   git clone https://github.com/evertondavid/RESTful-With-AspNet-7-and-React.git
 
 2. **Start the application:**
    Copy code: dotnet run
