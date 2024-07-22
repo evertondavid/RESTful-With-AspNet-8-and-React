@@ -22,7 +22,7 @@ using RestfullWithAspNet.Services.Implementations;
 using Serilog;
 
 // Application metadata
-var appAspNetVersion = "7.0";
+var appAspNetVersion = "8.0";
 var appTitle = $"RESTful API with ASP.NET '{appAspNetVersion}'.";
 var appVersion = "1.0.0";
 var appDescription = $"RESTful API with ASP.NET '{appAspNetVersion}'.";
