@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RestfullWithAspNet.Business;
 using RestfullWithAspNet.Data.VO;
-using RestfullWithAspNet.Hypernedia.Filters;
+using HATEOAS.Hypernedia.Filters;
 
 namespace RestfullWithAspNet.Controllers
 {

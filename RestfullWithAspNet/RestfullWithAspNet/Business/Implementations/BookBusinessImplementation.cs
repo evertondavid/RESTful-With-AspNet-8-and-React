@@ -1,6 +1,6 @@
 using RestfullWithAspNet.Data.Converter.Implementations;
 using RestfullWithAspNet.Data.VO;
-using RestfullWithAspNet.Hypermedia.Utils;
+using HATEOAS.Hypermedia.Utils;
 using RestfullWithAspNet.Model;
 using RestfullWithAspNet.Repository;
 

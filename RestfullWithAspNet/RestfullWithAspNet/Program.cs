@@ -1,4 +1,5 @@
 using System.Text;
+using HATEOAS.Hypernedia.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Rewrite;
@@ -13,7 +14,6 @@ using RestfullWithAspNet.Business.Implementations;
 using RestfullWithAspNet.Configurations;
 using RestfullWithAspNet.Hypermedia.Enricher;
 using RestfullWithAspNet.Hypernedia.Enricher;
-using RestfullWithAspNet.Hypernedia.Filters;
 using RestfullWithAspNet.Model.Context;
 using RestfullWithAspNet.Repository;
 using RestfullWithAspNet.Repository.Generic;

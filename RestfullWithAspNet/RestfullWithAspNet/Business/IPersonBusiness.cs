@@ -1,5 +1,5 @@
 using RestfullWithAspNet.Data.VO;
-using RestfullWithAspNet.Hypermedia.Utils;
+using HATEOAS.Hypermedia.Utils;
 
 namespace RestfullWithAspNet.Business
 {

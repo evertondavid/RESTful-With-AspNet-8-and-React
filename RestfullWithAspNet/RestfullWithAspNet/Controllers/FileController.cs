@@ -94,7 +94,7 @@ namespace RestfullWithAspNet.Controllers
                 HttpContext.Response.ContentType =
                 $"application/{Path.GetExtension(fileName).Replace(".", "")}"; // Set the content type of the response
 
-                HttpContext.Response.Headers.Add("content-length", buffer.Length.ToString()); // Set the content length of the response
+                HttpContext.Response.Headers.Append("content-length", buffer.Length.ToString()); // Set the content length of the response
 
                 await HttpContext.Response.Body.WriteAsync(buffer, 0, buffer.Length); // Write the buffer to the response body and return the response
             }

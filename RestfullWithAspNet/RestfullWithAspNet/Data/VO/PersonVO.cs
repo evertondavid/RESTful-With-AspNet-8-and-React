@@ -1,5 +1,5 @@
-using RestfullWithAspNet.Hypermedia.Abstract;
-using RestfullWithAspNet.Hypermedia.Filters;
+using HATEOAS.Hypermedia.Abstract;
+using HATEOAS.Hypermedia.Filters;
 
 namespace RestfullWithAspNet.Data.VO
 {

@@ -1,8 +1,8 @@
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using RestfullWithAspNet.Data.VO;
-using RestfullWithAspNet.Hypermedia.Constants;
-using RestfullWithAspNet.Hypermedia.Filters;
+using HATEOAS.Hypermedia.Constants;
+using HATEOAS.Hypermedia.Filters;
 
 namespace RestfullWithAspNet.Hypermedia.Enricher
 {
